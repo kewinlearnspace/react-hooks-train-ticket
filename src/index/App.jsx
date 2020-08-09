@@ -9,11 +9,13 @@ import HighSpeed from './HighSpeed.jsx'
 import Journey from './Journey.jsx'
 import Submit from './Submit.jsx'
 
+import CitySelector from '../common/CitySelector.jsx'
+
 // actions返回的是对象。需要将其传入到dispatch中
-import { exchangeFromTo, showCitySelector } from './actions'
+import { exchangeFromTo, showCitySelector, hideCitySelector } from './actions'
 
 function App(props) {
-  const { from, to, dispatch } = props
+  const { from, to, dispatch, isCitySelectorVisible, cityData, isLoadingCityData } = props
   // 由于onBack没有引用到任何可变的变量,所以第二个参数为空
   const onBack = useCallback(() => {
     window.history.back()
@@ -37,6 +39,15 @@ function App(props) {
       dispatch
     )
   }, [])
+
+  const CitySlectorCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        onBack: hideCitySelector, // onBack执行hideCitySelector()
+      },
+      dispatch
+    )
+  }, [])
   return (
     <div>
       <div className="header-wapper">
@@ -54,6 +65,12 @@ function App(props) {
         <HighSpeed></HighSpeed>
         <Submit></Submit>
       </form>
+      <CitySelector
+        show={isCitySelectorVisible}
+        cityData={cityData}
+        isLoading={isLoadingCityData}
+        {...CitySlectorCbs}
+      ></CitySelector>
     </div>
   )
 }

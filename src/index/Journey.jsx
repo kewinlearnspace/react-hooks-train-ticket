@@ -18,7 +18,7 @@ export default function Journey(props) {
       <div className="journey-switch" onClick={() => exchangeFromTo()}>
         <img src={switchImg} width="70" height="40" alt="switch" />
       </div>
-      <div className="jounery-station" onClick={() => showCitySelector(true)}>
+      <div className="jounery-station" onClick={() => showCitySelector(false)}>
         <input type="text" readOnly name="to" value={to} className="journey-input journey-to" />
       </div>
     </div>
