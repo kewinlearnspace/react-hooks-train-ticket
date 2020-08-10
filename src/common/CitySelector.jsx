@@ -3,7 +3,61 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames' // 配置动态类插件
 import './CitySelector.css'
 
-// 对于只有纯粹属性输入的组件,一般都可以用 memo 来优化重复渲染性能
+/**
+ * 对于只有纯粹属性输入的组件,一般都可以用 memo 来优化重复渲染性能
+ */
+
+// 搜索单个城市条目
+const SuggestItem = memo(function SuggestItem(props) {
+  const { name, onClick } = props
+  return (
+    <li className="city-suggest-li" onClick={() => onClick(name)}>
+      {name}
+    </li>
+  )
+})
+SuggestItem.propType = {
+  name: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+}
+
+// 搜索单个城市条目集合
+const Suggest = memo(function Suggest(props) {
+  const { searchKey, onSelect } = props
+  const [result, setResult] = useState([])
+  useEffect(() => {
+    fetch('/rest/search?key=' + encodeURIComponent(searchKey))
+      .then((res) => res.json())
+      .then((data) => {
+        const { result, searchKey: sKey } = data
+        // 避免多次请求时,无法确认那次请求先返回,所以对返回的搜索结果中的sKey与当前searchKey比较。保证仅展示当前searchKey搜索的内容
+        if (sKey === searchKey) {
+          setResult(result)
+        }
+      })
+  }, [searchKey])
+
+  const fallBackResult = useMemo(() => {
+    if (!result.length) {
+      return [{ display: searchKey }]
+    }
+    return result
+  }, [result, searchKey])
+  return (
+    <div className="city-suggest">
+      <ul className="city-suggest-ul">
+        {fallBackResult.map((item) => (
+          <SuggestItem key={item.display} name={item.display} onClick={onSelect}></SuggestItem>
+        ))}
+      </ul>
+    </div>
+  )
+})
+SuggestItem.propType = {
+  searchKey: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+}
+
 // 层次条目组件
 const CityItem = memo(function CityItem(props) {
   const { name, onSelect } = props
@@ -151,6 +205,7 @@ const CitySelector = memo(function CitySelector(props) {
           &#xf063;
         </i>
       </div>
+      {Boolean(key) && <Suggest searchKey={key} onSelect={(key) => onSelect(key)}></Suggest>}
       {outputCitySections()}
     </div>
   )
