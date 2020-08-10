@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, memo } from 'react'
+import React, { useState, useMemo, useEffect, memo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames' // 配置动态类插件
 import './CitySelector.css'
@@ -23,10 +23,12 @@ const CitySection = memo(function CitySection(props) {
   const { title, cities = [], onSelect } = props
   return (
     <ul className="city-ul">
-      <li className="city-li" key="title">
+      {/* data-cate为html自定义属性 */}
+      <li className="city-li" key="title" data-cate={title}>
         {title}
       </li>
       {cities.map((city) => (
+        // a
         <CityItem key={city.name} name={city.name} onSelect={onSelect}></CityItem>
       ))}
     </ul>
@@ -40,7 +42,7 @@ CitySection.propType = {
 
 // 列表组件
 const CityList = memo(function CityList(props) {
-  const { sections, onSelect } = props
+  const { sections, onSelect, toAlpha } = props
   return (
     <div className="city-list">
       <div className="city-cate">
@@ -53,13 +55,38 @@ const CityList = memo(function CityList(props) {
           ></CitySection>
         ))}
       </div>
+      <div className="city-index">
+        {alphabet.map((alpha) => {
+          return <AlphaIndex key={alpha} alpha={alpha} onClick={toAlpha}></AlphaIndex>
+        })}
+      </div>
     </div>
   )
 })
 CityList.propType = {
   sections: PropTypes.array.isRequired,
   onSelect: PropTypes.func.isRequired,
+  toAlpha: PropTypes.func.isRequired,
 }
+
+// 右侧字母定位层组件
+const AlphaIndex = memo(function AlphaIndex(props) {
+  const { alpha, onClick } = props
+  return (
+    <i className="city-index-item" onClick={() => onClick(alpha)}>
+      {alpha}
+    </i>
+  )
+})
+AlphaIndex.prototype = {
+  alpha: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+}
+
+// 26个英文字母的构建,主要通过ASCII值
+const alphabet = Array.from(new Array(26), (ele, index) => {
+  return String.fromCharCode(65 + index)
+})
 
 const CitySelector = memo(function CitySelector(props) {
   const { show, cityData, isLoading, onBack, fetchCityData, onSelect } = props
@@ -75,6 +102,10 @@ const CitySelector = memo(function CitySelector(props) {
     fetchCityData()
   }, [show, cityData, isLoading])
 
+  // 不依赖变量所以为空
+  const toAlpha = useCallback((alpha) => {
+    document.querySelector(`[data-cate='${alpha}']`).scrollIntoView()
+  }, [])
   // CityList挂载到CitySelector上时部分数据可能不存在需要特殊处理
   const outputCitySections = () => {
     if (isLoading) {
@@ -82,7 +113,9 @@ const CitySelector = memo(function CitySelector(props) {
     }
     // cityData数据请求回来才开始渲染CityList
     if (cityData) {
-      return <CityList sections={cityData.cityList} onSelect={onSelect}></CityList>
+      return (
+        <CityList sections={cityData.cityList} onSelect={onSelect} toAlpha={toAlpha}></CityList>
+      )
     }
     return <div>Error</div>
   }
