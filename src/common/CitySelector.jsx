@@ -1,20 +1,25 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, memo } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames' // 配置动态类插件
 import './CitySelector.css'
 
+// 对于只有纯粹属性输入的组件,一般都可以用 memo 来优化重复渲染性能
 // 层次条目组件
-function CityItem(props) {
+const CityItem = memo(function CityItem(props) {
   const { name, onSelect } = props
   return (
     <li className="city-li" onClick={() => onSelect(name)}>
       {name}
     </li>
   )
+})
+CityItem.propType = {
+  name: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
 }
 
 // 层次条目集合
-function CitySection(props) {
+const CitySection = memo(function CitySection(props) {
   const { title, cities = [], onSelect } = props
   return (
     <ul className="city-ul">
@@ -26,10 +31,15 @@ function CitySection(props) {
       ))}
     </ul>
   )
+})
+CitySection.propType = {
+  title: PropTypes.string.isRequired,
+  cities: PropTypes.array,
+  onSelect: PropTypes.func.isRequired,
 }
 
 // 列表组件
-function CityList(props) {
+const CityList = memo(function CityList(props) {
   const { sections, onSelect } = props
   return (
     <div className="city-list">
@@ -45,9 +55,13 @@ function CityList(props) {
       </div>
     </div>
   )
+})
+CityList.propType = {
+  sections: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
 }
 
-function CitySelector(props) {
+const CitySelector = memo(function CitySelector(props) {
   const { show, cityData, isLoading, onBack, fetchCityData, onSelect } = props
   const [searchKey, setSearchKey] = useState('')
   // searchKey不变就不会重新计算key
@@ -107,7 +121,7 @@ function CitySelector(props) {
       {outputCitySections()}
     </div>
   )
-}
+})
 
 CitySelector.propType = {
   show: PropTypes.bool.isRequired,
