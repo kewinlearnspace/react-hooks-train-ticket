@@ -4,13 +4,160 @@ import classnames from "classnames";
 import "./DateSelector.css";
 
 import Header from "./Header.jsx";
+import { h0 } from "./fp";
+/**
+ *
+ * @param {*} props
+ */
+
+// 日
+function Day(props) {
+  const { day, onSelect } = props;
+  // day = null
+  if (!day) {
+    return <td className="null"></td>;
+  }
+  const classes = [];
+  const now = h0();
+
+  if (day < now) {
+    classes.push("disabled");
+  }
+  if ([6, 0].includes(new Date(day).getDay())) {
+    classes.push("weekend");
+  }
+
+  const dateString = now === day ? "今天" : new Date(day).getDate();
+  return (
+    <td className={classnames(classes)} onClick={() => onSelect(day)}>
+      {dateString}
+    </td>
+  );
+}
+Day.prototype = {
+  day: PropTypes.number,
+  onSelect: PropTypes.func.isRequired
+};
+
+// 周
+function Week(props) {
+  const { days, onSelect } = props;
+  return (
+    <tr className="date-table-days">
+      {days.map((day, index) => (
+        <Day key={index} day={day} onSelect={onSelect}></Day>
+      ))}
+    </tr>
+  );
+}
+Month.prototype = {
+  days: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired
+};
+
+// 月
+function Month(props) {
+  /**
+   * startingTimeInMonth 每个月第一天的时间戳
+   */
+  const { startingTimeInMonth, onSelect } = props;
+  // 获取当前月的所有日期,并且以7天为一组进行渲染，以每天的0时刻代表当天
+  // 获取当前月的所有日期
+  const startDay = new Date(startingTimeInMonth);
+  const currentDay = new Date(startingTimeInMonth);
+  let days = [];
+  while (currentDay.getMonth() === startDay.getMonth()) {
+    days.push(currentDay.getTime());
+    // currentDay日期天数自增,超过当前月最后一天时,结束循环
+    currentDay.setDate(currentDay.getDate() + 1);
+  }
+
+  // 按1行7日计算
+  // 当前月份1日前填充null
+  days = new Array(startDay.getDay() ? startDay.getDay() - 1 : 6)
+    .fill(null)
+    .concat(days);
+  // 当前月份最后一日后填充null
+  const lastDay = new Date(days[days.length - 1]);
+  days = days.concat(
+    new Array(lastDay.getDay() ? 7 - lastDay.getDay() : 0).fill(null)
+  );
+
+  // 将日期以周为单位进行分组 此时days的为7的倍数
+  const weeks = [];
+
+  // 根据每周7天,划分当月有几周
+  for (let row = 0; row < days.length / 7; row++) {
+    const week = days.slice(row * 7, (row + 1) * 7);
+    weeks.push(week);
+  }
+
+  return (
+    <table className="date-table">
+      <thead>
+        <tr>
+          <td colSpan="7">
+            <h5>
+              {startDay.getFullYear()}年{startDay.getMonth() + 1}
+            </h5>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="data-table-weeks">
+          <th>周一</th>
+          <th>周二</th>
+          <th>周三</th>
+          <th>周四</th>
+          <th>周五</th>
+          <th className="weekend">周六</th>
+          <th className="weekend">周日</th>
+        </tr>
+        {weeks.map((week, index) => (
+          <Week key={index} days={week} onSelect={onSelect}></Week>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+Month.prototype = {
+  startingTimeInMonth: PropTypes.number.isRequired,
+  onSelect: PropTypes.func.isRequired
+};
 
 export default function DateSelector(props) {
   const { show, onSelect, onBack } = props;
+
+  const now = new Date();
+  // 清除时分秒
+  now.setHours(0);
+  now.setMinutes(0);
+  now.setSeconds(0);
+  now.setMilliseconds(0);
+  // 将日期设为当前月的1号
+  now.setDate(1);
+  // now.getTime()获取当前月的0时刻
+  const monthSequence = [now.getTime()];
+  // 当前月+1即为下个月
+  now.setMonth(now.getMonth() + 1);
+  monthSequence.push(now.getTime());
+
+  now.setMonth(now.getMonth() + 1);
+  monthSequence.push(now.getTime());
+
   return (
     <div className={classnames("date-selector", { hidden: !show })}>
       <Header title="日期选择" onBack={onBack}></Header>
-      <div className="date-selector-tables"></div>
+      <div className="date-selector-tables">
+        {monthSequence.map(month => (
+          <Month
+            key={month}
+            startingTimeInMonth={month}
+            onSelect={onSelect}
+          ></Month>
+        ))}
+      </div>
     </div>
   );
 }

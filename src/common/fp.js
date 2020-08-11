@@ -1,3 +1,7 @@
+/**
+ * 年月日-时间戳函数(五时分秒毫秒)
+ * @param {*} timestamp
+ */
 export function h0(timestamp = Date.now()) {
   const target = new Date(timestamp);
 

@@ -12,6 +12,8 @@ import Submit from "./Submit.jsx";
 import CitySelector from "../common/CitySelector.jsx";
 import DateSelector from "../common/DateSelector.jsx";
 
+import { h0 } from "../common/fp";
+
 // actions返回的是对象。需要将其传入到dispatch中
 import {
   exchangeFromTo,
@@ -20,7 +22,8 @@ import {
   fetchCityData,
   setSelectedCity,
   showDateSelector,
-  hideDateSelector
+  hideDateSelector,
+  setDepartDate
 } from "./actions";
 
 function App(props) {
@@ -48,6 +51,7 @@ function App(props) {
   //   dispatch(showCitySelector())
   // }, [])
 
+  // 始发站
   const cbs = useMemo(() => {
     return bindActionCreators(
       {
@@ -58,6 +62,7 @@ function App(props) {
     );
   }, []);
 
+  // 城市
   const citySlectorCbs = useMemo(() => {
     return bindActionCreators(
       {
@@ -69,6 +74,7 @@ function App(props) {
     );
   }, []);
 
+  // 日期
   const departDateCbs = useMemo(() => {
     return bindActionCreators(
       {
@@ -85,6 +91,18 @@ function App(props) {
       },
       dispatch
     );
+  }, []);
+
+  //
+  const onSelectDate = useCallback(day => {
+    if (!day) {
+      return;
+    }
+    if (day < h0()) {
+      return;
+    }
+    dispatch(setDepartDate(day));
+    dispatch(hideDateSelector());
   }, []);
   return (
     <div>
@@ -112,6 +130,7 @@ function App(props) {
       <DateSelector
         show={isDateSelectorVisible}
         {...dateSelector}
+        onSelect={onSelectDate}
       ></DateSelector>
     </div>
   );
