@@ -21,14 +21,14 @@ npm start
 
 ## memo 用法
 
-- 对于只有纯粹属性输入的组件,一般都可以用 memo 来优化重复渲染性能
+- 对于只有纯粹属性输入的组件(数据来源于 props),一般都可以用 memo 来优化重复渲染性能
 
 ## 知识点
 
 - 多个函数组件之间嵌套的重复渲染问题以及性能优化(memo 的使用)
 - 条件渲染内部函数的作用
   ```jsx
-  const isError = () {
+  const isError = () => {
     if(true) return <div>true</div>
     if(fasle) return <div>fasle</div>
     reutrn <div>error</div>
