@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { memo } from 'react'
 import classnames from 'classnames'
 import Prototype from 'prop-types'
 import './HighSpeed.css'
 
-export default function HighSpeed(props) {
+const HighSpeed = memo(function HighSpeed(props) {
   const { highSpeed, toggle } = props
   return (
     <div className="high-speed">
@@ -16,8 +16,10 @@ export default function HighSpeed(props) {
       </div>
     </div>
   )
-}
+})
+
 HighSpeed.prototype = {
   highSpeed: Prototype.bool.isRequired,
   toggle: Prototype.func.isRequired,
 }
+export default HighSpeed
