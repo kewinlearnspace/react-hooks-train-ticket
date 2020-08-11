@@ -10,7 +10,7 @@ import "./DepartDate.css";
  * 解决:可以将当前时间通过props传递当当前组件给h0(date)使用
  * @param {*} props
  */
-//
+
 export default function DepartDate(props) {
   const { time, onClick } = props;
 

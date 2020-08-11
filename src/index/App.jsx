@@ -10,6 +10,7 @@ import Journey from "./Journey.jsx";
 import Submit from "./Submit.jsx";
 
 import CitySelector from "../common/CitySelector.jsx";
+import DateSelector from "../common/DateSelector.jsx";
 
 // actions返回的是对象。需要将其传入到dispatch中
 import {
@@ -18,7 +19,8 @@ import {
   hideCitySelector,
   fetchCityData,
   setSelectedCity,
-  showDateSelector
+  showDateSelector,
+  hideDateSelector
 } from "./actions";
 
 function App(props) {
@@ -27,6 +29,7 @@ function App(props) {
     to,
     dispatch,
     isCitySelectorVisible,
+    isDateSelectorVisible,
     cityData,
     isLoadingCityData,
     departDate
@@ -74,6 +77,15 @@ function App(props) {
       dispatch
     );
   }, []);
+
+  const dateSelector = useMemo(() => {
+    return bindActionCreators(
+      {
+        onBack: hideDateSelector
+      },
+      dispatch
+    );
+  }, []);
   return (
     <div>
       <div className="header-wapper">
@@ -97,6 +109,10 @@ function App(props) {
         isLoading={isLoadingCityData}
         {...citySlectorCbs}
       ></CitySelector>
+      <DateSelector
+        show={isDateSelectorVisible}
+        {...dateSelector}
+      ></DateSelector>
     </div>
   );
 }
