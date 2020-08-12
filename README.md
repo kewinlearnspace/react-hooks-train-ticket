@@ -23,6 +23,10 @@ npm start
 
 - 对于只有纯粹属性输入的组件(数据来源于 props),一般都可以用 memo 来优化重复渲染性能
 
+## 自定义 hooks 函数的注意事项
+
+- 保证不同的渲染周期中,调用的 hooks 的次序和数量都是一致
+
 ## 知识点
 
 - 多个函数组件之间嵌套的重复渲染问题以及性能优化(memo 的使用)
@@ -34,6 +38,12 @@ npm start
     reutrn <div>error</div>
   }
   ```
+
+## 报错搜集
+
+- Error: Rendered more hooks than during the previous render
+  - 由于 2 处渲染过程中,经历的 hook 函数不匹配导致的
+  - 解决:查看当前渲染组件中是否存在过早 return jsx
 
 ## react 中对副作用的定义,react 中什么是副作用？
 

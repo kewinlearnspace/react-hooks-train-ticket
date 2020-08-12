@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 
 import "./App.css";
 
+import useNav from "../common/useNav.js";
 import Nav from "../common/Nav.jsx";
 import Bottom from "./Bottom.jsx";
 import List from "./List.jsx";
@@ -20,7 +21,9 @@ import {
   setTicketTypes,
   setTrainTypes,
   setDepartStations,
-  setArriveStations
+  setArriveStations,
+  prevDate,
+  nextDate
 } from "./actions";
 
 import { h0 } from "../common/fp";
@@ -49,6 +52,7 @@ function App(props) {
   }, []);
 
   // 操作了组件上下文之外的东西也属于副作用的一种
+  // useEffect第二个参数一定要明确是否书写
   useEffect(() => {
     // 解析url
     const { from, to, date, highSpeed } = URI.parseQuery(
@@ -60,7 +64,7 @@ function App(props) {
     dispatch(setHighSpeed(highSpeed === "true"));
     // url参数解析完后
     dispatch(setSearchParsed(true));
-  });
+  }, []);
 
   // 一般来说作为发起请求的参数,那么这些参数就是该useEffect的依赖
   useEffect(() => {
@@ -124,16 +128,28 @@ function App(props) {
     arriveTimeEnd
   ]);
 
+  const { isPrevDisabled, isNextDisabled, prev, next } = useNav(
+    departDate,
+    dispatch,
+    prevDate,
+    nextDate
+  );
+
   if (!searchParsed) {
     return null;
   }
-
   return (
     <div>
       <div className="header-wapper">
         <Header title={`${from} -> ${to}`} onBack={onBack}></Header>
       </div>
-      <Nav></Nav>
+      <Nav
+        date={departDate}
+        isPrevDisabled={isPrevDisabled}
+        isNextDisabled={isNextDisabled}
+        prev={prev}
+        next={next}
+      ></Nav>
       <Bottom></Bottom>
       <List></List>
     </div>
