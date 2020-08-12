@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import URI from "urijs";
 import dayjs from "dayjs";
@@ -23,10 +23,15 @@ import {
   setDepartStations,
   setArriveStations,
   prevDate,
-  nextDate
+  nextDate,
+  toggleOrderType,
+  toggleHighSpeed,
+  toggleOnlyTickets,
+  toggleIsFiltersVisible
 } from "./actions";
 
 import { h0 } from "../common/fp";
+import { bindActionCreators } from "redux";
 
 function App(props) {
   const {
@@ -46,7 +51,8 @@ function App(props) {
     arriveTimeStart,
     arriveTimeEnd,
     searchParsed, // 控制URL解析完成后才开始发送请求
-    trainList
+    trainList,
+    isFiltersVisible
   } = props;
   const onBack = useCallback(() => {
     window.history.back();
@@ -136,6 +142,18 @@ function App(props) {
     nextDate
   );
 
+  const bottomCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        toggleOrderType,
+        toggleHighSpeed,
+        toggleOnlyTickets,
+        toggleIsFiltersVisible
+      },
+      dispatch
+    );
+  }, []);
+
   if (!searchParsed) {
     return null;
   }
@@ -152,7 +170,13 @@ function App(props) {
         next={next}
       ></Nav>
       <List list={trainList}></List>
-      <Bottom></Bottom>
+      <Bottom
+        highSpeed={highSpeed}
+        orderType={orderType}
+        onlyTickets={onlyTickets}
+        isFiltersVisible={isFiltersVisible}
+        {...bottomCbs}
+      ></Bottom>
     </div>
   );
 }
