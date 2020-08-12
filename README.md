@@ -34,3 +34,8 @@ npm start
     reutrn <div>error</div>
   }
   ```
+
+## react 中对副作用的定义,react 中什么是副作用？
+
+- 发送 ajax、修改 dom 节点。还有....？？
+- 操作了组件上下文之外的东西也属于副作用的一种
