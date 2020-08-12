@@ -45,7 +45,8 @@ function App(props) {
     departTimeEnd,
     arriveTimeStart,
     arriveTimeEnd,
-    searchParsed // 控制URL解析完成后才开始发送请求
+    searchParsed, // 控制URL解析完成后才开始发送请求
+    trainList
   } = props;
   const onBack = useCallback(() => {
     window.history.back();
@@ -140,7 +141,7 @@ function App(props) {
   }
   return (
     <div>
-      <div className="header-wapper">
+      <div className="header-wrapper">
         <Header title={`${from} -> ${to}`} onBack={onBack}></Header>
       </div>
       <Nav
@@ -150,8 +151,8 @@ function App(props) {
         prev={prev}
         next={next}
       ></Nav>
+      <List list={trainList}></List>
       <Bottom></Bottom>
-      <List></List>
     </div>
   );
 }
