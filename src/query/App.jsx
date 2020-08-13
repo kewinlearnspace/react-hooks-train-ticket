@@ -174,13 +174,15 @@ function App(props) {
       <div className="header-wrapper">
         <Header title={`${from} -> ${to}`} onBack={onBack}></Header>
       </div>
-      <Nav
-        date={departDate}
-        isPrevDisabled={isPrevDisabled}
-        isNextDisabled={isNextDisabled}
-        prev={prev}
-        next={next}
-      ></Nav>
+      <div className="nav-wrapper">
+        <Nav
+          date={departDate}
+          isPrevDisabled={isPrevDisabled}
+          isNextDisabled={isNextDisabled}
+          prev={prev}
+          next={next}
+        ></Nav>
+      </div>
       <List list={trainList}></List>
       <Bottom
         highSpeed={highSpeed}

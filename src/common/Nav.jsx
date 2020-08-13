@@ -18,7 +18,7 @@ const Nav = memo(function Nav(props) {
         className={classnames("nav-prev", { "nav-disabled": isPrevDisabled })}
         onClick={prev}
       >
-        前一天
+        前一天{String(isPrevDisabled)}
       </span>
       <span className="nav-current">{currentString}</span>
       <span
