@@ -1,44 +1,45 @@
-import React, { memo, useState, useCallback } from 'react'
-import PropTypes from 'prop-types'
-import classnames from 'classnames'
-import './Bottom.css'
-import { ORDER_DEPART } from './constant'
+import React, { memo, useState, useCallback } from "react";
+import PropTypes from "prop-types";
+import classnames from "classnames";
+import "./Bottom.css";
+import { ORDER_DEPART } from "./constant";
+import Slider from "./Slider.jsx";
 
 const Filter = memo(function Filter(props) {
-  const { name, checked, value, toggle } = props
+  const { name, checked, value, toggle } = props;
   return (
     <li className={classnames({ checked })} onClick={() => toggle(value)}>
       {name}
     </li>
-  )
-})
+  );
+});
 Filter.propTypes = {
   name: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
   value: PropTypes.string.isRequired,
-  toggle: PropTypes.func.isRequired,
+  toggle: PropTypes.func.isRequired
   // dispatch: PropTypes.func.isRequired,
-}
+};
 
 const Option = memo(function Option(props) {
-  const { title, options, checkedMap, update } = props
+  const { title, options, checkedMap, update } = props;
   const toggle = useCallback(
-    (value) => {
-      const newCheckedMap = { ...checkedMap }
+    value => {
+      const newCheckedMap = { ...checkedMap };
       if (value in checkedMap) {
-        delete newCheckedMap[value]
+        delete newCheckedMap[value];
       } else {
-        newCheckedMap[value] = true
+        newCheckedMap[value] = true;
       }
-      update(newCheckedMap)
+      update(newCheckedMap);
     },
     [checkedMap, update]
-  )
+  );
   return (
     <div className="option">
       <h3>{title}</h3>
       <ul>
-        {options.map((option) => (
+        {options.map(option => (
           <Filter
             key={option.value}
             {...option}
@@ -48,16 +49,16 @@ const Option = memo(function Option(props) {
         ))}
       </ul>
     </div>
-  )
-})
+  );
+});
 
 Option.propTypes = {
   title: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
   checkedMap: PropTypes.object.isRequired,
-  update: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired
   // dispatch: PropTypes.func.isRequired,
-}
+};
 
 const BottomModal = memo(function BottomModal(props) {
   const {
@@ -81,63 +82,75 @@ const BottomModal = memo(function BottomModal(props) {
     setDepartTimeEnd,
     setArriveTimeStart,
     setArriveTimeEnd,
-    toggleIsFiltersVisible,
-  } = props
+    toggleIsFiltersVisible
+  } = props;
 
   const [localCheckedTicketTypes, setLocalCheckedTicketTypes] = useState(() => {
-    return { ...checkedTicketTypes }
-  })
+    return { ...checkedTicketTypes };
+  });
   const [localCheckedTrainTypes, setLocalCheckedTrainTypes] = useState(() => {
-    return { ...localCheckedTrainTypes }
-  })
-  const [localCheckedDepartStations, setLocalCheckedDepartStations] = useState(() => {
-    return { ...localCheckedDepartStations }
-  })
-  const [localCheckedArriveStations, setLocalCheckedArriveStations] = useState(() => {
-    return {
-      ...localCheckedArriveStations,
+    return { ...localCheckedTrainTypes };
+  });
+  const [localCheckedDepartStations, setLocalCheckedDepartStations] = useState(
+    () => {
+      return { ...localCheckedDepartStations };
     }
-  })
+  );
+  const [localCheckedArriveStations, setLocalCheckedArriveStations] = useState(
+    () => {
+      return {
+        ...localCheckedArriveStations
+      };
+    }
+  );
 
-  const [localDepartTimeStart, setLocalDepartTimeStart] = useState(departTimeStart)
-  const [localDepartTimeEnd, setLocalDepartTimeEnd] = useState(departTimeEnd)
-  const [localArriveTimeStart, setLocalArriveTimeStart] = useState(arriveTimeStart)
-  const [localArriveTimeEnd, setLocalArriveTimeEnd] = useState(arriveTimeEnd)
+  // 缓存出发起点时间
+  const [localDepartTimeStart, setLocalDepartTimeStart] = useState(
+    departTimeStart
+  );
+  // 缓存出发结束时间
+  const [localDepartTimeEnd, setLocalDepartTimeEnd] = useState(departTimeEnd);
+  // 缓存到达起点时间
+  const [localArriveTimeStart, setLocalArriveTimeStart] = useState(
+    arriveTimeStart
+  );
+  // 缓存到达结束时间
+  const [localArriveTimeEnd, setLocalArriveTimeEnd] = useState(arriveTimeEnd);
 
   const optionGroup = [
     {
-      title: '坐席类型',
+      title: "坐席类型",
       options: ticketTypes,
       // checkedMap: checkedTicketTypes,
       checkedMap: localCheckedTicketTypes,
-      update: setLocalCheckedTicketTypes,
+      update: setLocalCheckedTicketTypes
       // dispatch: localCheckedTicketTypesDispatch,
     },
     {
-      title: '车次类型',
+      title: "车次类型",
       options: trainTypes,
       // checkedMap: checkedTrainTypes,
       checkedMap: localCheckedTrainTypes,
-      update: setLocalCheckedTrainTypes,
+      update: setLocalCheckedTrainTypes
       // dispatch: localCheckedTrainTypesDispatch,
     },
     {
-      title: '出发车站',
+      title: "出发车站",
       options: departStations,
       // checkedMap: checkedDepartStations,
       checkedMap: localCheckedDepartStations,
-      update: setLocalCheckedDepartStations,
+      update: setLocalCheckedDepartStations
       // dispatch: localCheckedDepartStationsDispatch,
     },
     {
-      title: '到达车站',
+      title: "到达车站",
       options: arriveStations,
       // checkedMap: checkedArriveStations,
       checkedMap: localCheckedArriveStations,
-      update: setLocalCheckedArriveStations,
+      update: setLocalCheckedArriveStations
       // dispatch: localCheckedArriveStationsDispatch,
-    },
-  ]
+    }
+  ];
 
   return (
     <div className="bottom-modal">
@@ -148,15 +161,29 @@ const BottomModal = memo(function BottomModal(props) {
             <span className="ok">确定</span>
           </div>
           <div className="options">
-            {optionGroup.map((group) => (
+            {optionGroup.map(group => (
               <Option {...group} key={group.title}></Option>
             ))}
           </div>
+          <Slider
+            title="出发时间"
+            currentStatrHours={localDepartTimeStart}
+            currentEndHours={localDepartTimeEnd}
+            onStartChange={setLocalDepartTimeStart}
+            onEndChange={setLocalDepartTimeEnd}
+          ></Slider>
+          <Slider
+            title="到达时间"
+            currentStatrHours={localArriveTimeStart}
+            currentEndHours={localArriveTimeEnd}
+            onStartChange={setLocalArriveTimeStart}
+            onEndChange={setLocalArriveTimeEnd}
+          ></Slider>
         </div>
       </div>
     </div>
-  )
-})
+  );
+});
 
 BottomModal.propTypes = {
   ticketTypes: PropTypes.array.isRequired,
@@ -179,8 +206,8 @@ BottomModal.propTypes = {
   setDepartTimeEnd: PropTypes.func.isRequired,
   setArriveTimeStart: PropTypes.func.isRequired,
   setArriveTimeEnd: PropTypes.func.isRequired,
-  toggleIsFiltersVisible: PropTypes.func.isRequired,
-}
+  toggleIsFiltersVisible: PropTypes.func.isRequired
+};
 
 export default function Bottom(props) {
   const {
@@ -211,33 +238,36 @@ export default function Bottom(props) {
     setDepartTimeStart,
     setDepartTimeEnd,
     setArriveTimeStart,
-    setArriveTimeEnd,
-  } = props
+    setArriveTimeEnd
+  } = props;
   return (
     <div className="bottom">
       <div className="bottom-filters">
         <span className="item" onClick={toggleOrderType}>
           <i className="icon">&#xf065;</i>
-          {orderType === ORDER_DEPART ? '出发 早->晚' : '耗时 短->长'}
+          {orderType === ORDER_DEPART ? "出发 早->晚" : "耗时 短->长"}
         </span>
-        <span className={classnames('item', { 'item-on': highSpeed })} onClick={toggleHighSpeed}>
-          <i className="icon">{highSpeed ? '\uf43f' : '\uf43e'}</i>
+        <span
+          className={classnames("item", { "item-on": highSpeed })}
+          onClick={toggleHighSpeed}
+        >
+          <i className="icon">{highSpeed ? "\uf43f" : "\uf43e"}</i>
           只看高铁动车
         </span>
         <span
-          className={classnames('item', { 'item-on': onlyTickets })}
+          className={classnames("item", { "item-on": onlyTickets })}
           onClick={toggleOnlyTickets}
         >
-          <i className="icon">{onlyTickets ? '\uf43d' : '\uf43c'}</i>
+          <i className="icon">{onlyTickets ? "\uf43d" : "\uf43c"}</i>
           只看有票
         </span>
         <span
-          className={classnames('item', {
-            'item-on': isFiltersVisible,
+          className={classnames("item", {
+            "item-on": isFiltersVisible
           })}
           onClick={toggleIsFiltersVisible}
         >
-          <i className="icon">{'\uf0f7'}</i>
+          <i className="icon">{"\uf0f7"}</i>
           综合筛选
         </span>
       </div>
@@ -267,7 +297,7 @@ export default function Bottom(props) {
         ></BottomModal>
       )}
     </div>
-  )
+  );
 }
 
 Bottom.prototype = {
@@ -299,5 +329,5 @@ Bottom.prototype = {
   setDepartTimeStart: PropTypes.func.isRequired,
   setDepartTimeEnd: PropTypes.func.isRequired,
   setArriveTimeStart: PropTypes.func.isRequired,
-  setArriveTimeEnd: PropTypes.func.isRequired,
-}
+  setArriveTimeEnd: PropTypes.func.isRequired
+};
