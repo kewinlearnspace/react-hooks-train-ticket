@@ -9,7 +9,7 @@ import "./Slider.css";
 const Slider = memo(function Slider(props) {
   const {
     title,
-    currentStatrHours,
+    currentStartHours,
     currentEndHours,
     onStartChange,
     onEndChange
@@ -27,8 +27,22 @@ const Slider = memo(function Slider(props) {
   const lastEndX = useRef();
   const range = useRef();
   const rangeWidth = useRef();
-  const [start, setStart] = useState(() => (currentStatrHours / 24) * 100);
+
+  // 记录上一次的值
+  const prevCurrentStartHours = useRef(currentStartHours);
+  const prevCurrentEndHours = useRef(currentEndHours);
+  const [start, setStart] = useState(() => (currentStartHours / 24) * 100);
   const [end, setEnd] = useState(() => (currentEndHours / 24) * 100);
+
+  if (prevCurrentStartHours.current !== currentStartHours) {
+    setStart((currentStartHours / 24) * 100);
+    prevCurrentStartHours.current = currentStartHours;
+  }
+
+  if (prevCurrentEndHours.current !== currentEndHours) {
+    setEnd((currentEndHours / 24) * 100);
+    prevCurrentEndHours.current = currentEndHours;
+  }
   // 使用useMemo生成计算值
   const startPercent = useMemo(() => {
     if (start > 100) {
@@ -169,7 +183,7 @@ const Slider = memo(function Slider(props) {
 
 Slider.prototype = {
   title: PropTyeps.string.isRequired,
-  currentStatrHours: PropTyeps.number.isRequired,
+  currentStartHours: PropTyeps.number.isRequired,
   currentEndHours: PropTyeps.number.isRequired,
   onStartChange: PropTyeps.func.isRequired,
   onEndChange: PropTyeps.func.isRequired
