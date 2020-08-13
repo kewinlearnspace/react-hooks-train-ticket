@@ -1,14 +1,36 @@
-import React, { memo, useState, useCallback, useMemo } from "react";
+import React, { memo, useState, useMemo, useReducer } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import "./Bottom.css";
 import { ORDER_DEPART } from "./constant";
 import Slider from "./Slider.jsx";
 
+function checkedReducer(state, action) {
+  const { type, payload } = action;
+  let newState;
+  switch (type) {
+    case "toggle":
+      newState = { ...state };
+      if (payload in newState) {
+        delete newState[payload];
+      } else {
+        newState[payload] = true;
+      }
+      return newState;
+    case "reset":
+      return {};
+    default:
+  }
+  return state;
+}
+
 const Filter = memo(function Filter(props) {
-  const { name, checked, value, toggle } = props;
+  const { name, checked, value, dispatch } = props;
   return (
-    <li className={classnames({ checked })} onClick={() => toggle(value)}>
+    <li
+      className={classnames({ checked })}
+      onClick={() => dispatch({ payload: value, type: "toggle" })}
+    >
       {name}
     </li>
   );
@@ -17,24 +39,24 @@ Filter.propTypes = {
   name: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
   value: PropTypes.string.isRequired,
-  toggle: PropTypes.func.isRequired
-  // dispatch: PropTypes.func.isRequired,
+  // toggle: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 
 const Option = memo(function Option(props) {
-  const { title, options, checkedMap, update } = props;
-  const toggle = useCallback(
-    value => {
-      const newCheckedMap = { ...checkedMap };
-      if (value in checkedMap) {
-        delete newCheckedMap[value];
-      } else {
-        newCheckedMap[value] = true;
-      }
-      update(newCheckedMap);
-    },
-    [checkedMap, update]
-  );
+  const { title, options, checkedMap, dispatch } = props;
+  // const toggle = useCallback(
+  //   (value) => {
+  //     const newCheckedMap = { ...checkedMap }
+  //     if (value in checkedMap) {
+  //       delete newCheckedMap[value]
+  //     } else {
+  //       newCheckedMap[value] = true
+  //     }
+  //     dispatch(newCheckedMap)
+  //   },
+  //   [checkedMap, dispatch]
+  // )
   return (
     <div className="option">
       <h3>{title}</h3>
@@ -44,7 +66,7 @@ const Option = memo(function Option(props) {
             key={option.value}
             {...option}
             checked={option.value in checkedMap}
-            toggle={toggle}
+            dispatch={dispatch}
           ></Filter>
         ))}
       </ul>
@@ -56,8 +78,8 @@ Option.propTypes = {
   title: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
   checkedMap: PropTypes.object.isRequired,
-  update: PropTypes.func.isRequired
-  // dispatch: PropTypes.func.isRequired,
+  // update: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 
 const BottomModal = memo(function BottomModal(props) {
@@ -85,25 +107,67 @@ const BottomModal = memo(function BottomModal(props) {
     toggleIsFiltersVisible
   } = props;
 
-  const [localCheckedTicketTypes, setLocalCheckedTicketTypes] = useState(() => {
-    return { ...checkedTicketTypes };
-  });
-  const [localCheckedTrainTypes, setLocalCheckedTrainTypes] = useState(() => {
-    return { ...checkedTrainTypes };
-  });
-  const [localCheckedDepartStations, setLocalCheckedDepartStations] = useState(
-    () => {
-      return { ...checkedDepartStations };
+  // useState
+  // const [localCheckedTicketTypes, setLocalCheckedTicketTypes] = useState(() => {
+  //   return { ...checkedTicketTypes }
+  // })
+  // const [localCheckedTrainTypes, setLocalCheckedTrainTypes] = useState(() => {
+  //   return { ...checkedTrainTypes }
+  // })
+  // const [localCheckedDepartStations, setLocalCheckedDepartStations] = useState(() => {
+  //   return { ...checkedDepartStations }
+  // })
+  // const [localCheckedArriveStations, setLocalCheckedArriveStations] = useState(() => {
+  //   return {
+  //     ...checkedArriveStations,
+  //   }
+  // })
+
+  // useReducer
+  const [localCheckedTicketTypes, localCheckedTicketTypesDispatch] = useReducer(
+    checkedReducer,
+    checkedTicketTypes,
+    checkedTicketTypes => {
+      return {
+        ...checkedTicketTypes
+      };
     }
   );
-  const [localCheckedArriveStations, setLocalCheckedArriveStations] = useState(
-    () => {
+  const [
+    localCheckedArriveStations,
+    localCheckedArriveStationsDispatch
+  ] = useReducer(
+    checkedReducer,
+    checkedArriveStations,
+    checkedArriveStations => {
       return {
         ...checkedArriveStations
       };
     }
   );
 
+  const [localCheckedTrainTypes, localCheckedTrainTypesDispatch] = useReducer(
+    checkedReducer,
+    checkedTrainTypes,
+    checkedTrainTypes => {
+      return {
+        ...checkedTrainTypes
+      };
+    }
+  );
+
+  const [
+    localCheckedDepartStations,
+    localCheckedDepartStationsDispatch
+  ] = useReducer(
+    checkedReducer,
+    checkedDepartStations,
+    checkedDepartStations => {
+      return {
+        ...checkedDepartStations
+      };
+    }
+  );
   // 缓存出发起点时间
   const [localDepartTimeStart, setLocalDepartTimeStart] = useState(
     departTimeStart
@@ -123,32 +187,32 @@ const BottomModal = memo(function BottomModal(props) {
       options: ticketTypes,
       // checkedMap: checkedTicketTypes,
       checkedMap: localCheckedTicketTypes,
-      update: setLocalCheckedTicketTypes
-      // dispatch: localCheckedTicketTypesDispatch,
+      // update: setLocalCheckedTicketTypes,
+      dispatch: localCheckedTicketTypesDispatch
     },
     {
       title: "车次类型",
       options: trainTypes,
       // checkedMap: checkedTrainTypes,
       checkedMap: localCheckedTrainTypes,
-      update: setLocalCheckedTrainTypes
-      // dispatch: localCheckedTrainTypesDispatch,
+      // update: setLocalCheckedTrainTypes,
+      dispatch: localCheckedTrainTypesDispatch
     },
     {
       title: "出发车站",
       options: departStations,
       // checkedMap: checkedDepartStations,
       checkedMap: localCheckedDepartStations,
-      update: setLocalCheckedDepartStations
-      // dispatch: localCheckedDepartStationsDispatch,
+      // update: setLocalCheckedDepartStations,
+      dispatch: localCheckedDepartStationsDispatch
     },
     {
       title: "到达车站",
       options: arriveStations,
       // checkedMap: checkedArriveStations,
       checkedMap: localCheckedArriveStations,
-      update: setLocalCheckedArriveStations
-      // dispatch: localCheckedArriveStationsDispatch,
+      // update: setLocalCheckedArriveStations,
+      dispatch: localCheckedArriveStationsDispatch
     }
   ];
 
@@ -193,15 +257,16 @@ const BottomModal = memo(function BottomModal(props) {
     if (isResetDisabled) {
       return;
     }
-
-    // localCheckedTicketTypesDispatch({ type: 'reset' })
-    // localCheckedTrainTypesDispatch({ type: 'reset' })
-    // localCheckedDepartStationsDispatch({ type: 'reset' })
-    // localCheckedArriveStationsDispatch({ type: 'reset' })
-    setLocalCheckedTicketTypes({});
-    setLocalCheckedTrainTypes({});
-    setLocalCheckedDepartStations({});
-    setLocalCheckedArriveStations({});
+    // useReducer
+    localCheckedTicketTypesDispatch({ type: "reset" });
+    localCheckedTrainTypesDispatch({ type: "reset" });
+    localCheckedDepartStationsDispatch({ type: "reset" });
+    localCheckedArriveStationsDispatch({ type: "reset" });
+    // useState
+    // setLocalCheckedTicketTypes({})
+    // setLocalCheckedTrainTypes({})
+    // setLocalCheckedDepartStations({})
+    // setLocalCheckedArriveStations({})
     setLocalDepartTimeStart(0);
     setLocalDepartTimeEnd(24);
     setLocalArriveTimeStart(0);
