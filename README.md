@@ -59,6 +59,7 @@ npm start
 - useState 的作用、异步初始化 state
 - 如何通过监控传入属性的 props 的变化,来更新 state 的状态
   - 通过 useRef 缓存上一次的值。当传入的 props 值发生变化时,取出上一次的值与当前 props 的值进行比较,对比是否需要更新 state 的状态
+- 异步组件加载失败,如何解决
 
 ## 报错搜集
 

@@ -1,7 +1,7 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from "redux";
 
-import reducers from './reducers'
-import thunk from 'redux-thunk'
+import reducers from "./reducers";
+import thunk from "redux-thunk";
 
 export default createStore(
   combineReducers(reducers),
@@ -12,12 +12,12 @@ export default createStore(
     departTimeStr: null, // 出发时间
     arriveTimeStr: null, // 到达时间
     departStation: null, // 出发站
-    arrvieStation: null, // 终点站
+    arriveStation: null, // 终点站
     trainNumber: null, // 车次
     durationStr: null, // 运行时间
     tickets: [],
     isScheduleVisible: false, // 浮层是否显示
-    searchParsed: false, // 控制页面的异步请求
+    searchParsed: false // 控制页面的异步请求
   },
   applyMiddleware(thunk)
-)
+);

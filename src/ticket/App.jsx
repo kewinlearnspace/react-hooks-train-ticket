@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, lazy, Suspense } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import URI from "urijs";
@@ -11,7 +11,7 @@ import Header from "../common/Header.jsx";
 import Nav from "../common/Nav.jsx";
 import Detail from "../common/Detail.jsx";
 import Candidate from "./Candidate.jsx";
-import Schedule from "./Schedule.jsx";
+// import Schedule from './Schedule.jsx'
 
 import {
   setDepartStation,
@@ -28,6 +28,8 @@ import {
   setTickets,
   toggleIsScheduleVisible
 } from "./actions";
+// 异步加载组件
+const Schedule = lazy(() => import("./Schedule.jsx"));
 
 function App(props) {
   const {
@@ -36,7 +38,7 @@ function App(props) {
     departTimeStr,
     arriveTimeStr,
     departStation,
-    arrvieStation,
+    arriveStation,
     trainNumber,
     durationStr,
     tickets,
@@ -101,7 +103,7 @@ function App(props) {
 
   // toggleIsScheduleVisible绑定到一起
   const detailCbs = useMemo(() => {
-    bindActionCreators(
+    return bindActionCreators(
       {
         toggleIsScheduleVisible
       },
@@ -126,7 +128,7 @@ function App(props) {
           next={next}
         />
       </div>
-      <div className="detial-wrapper">
+      <div className="detail-wrapper">
         <Detail
           departDate={departDate}
           arriveDate={arriveDate}
@@ -134,11 +136,27 @@ function App(props) {
           arriveTimeStr={arriveTimeStr}
           trainNumber={trainNumber}
           departStation={departStation}
-          arrvieStation={arrvieStation}
+          arriveStation={arriveStation}
           durationStr={durationStr}
           {...detailCbs}
         ></Detail>
       </div>
+      {isScheduleVisible && (
+        <div
+          className="mask"
+          onClick={() => dispatch(toggleIsScheduleVisible())}
+        >
+          {/* 异步组件 */}
+          <Suspense fallback={<div>loading</div>}>
+            <Schedule
+              date={departDate}
+              trainNumber={trainNumber}
+              departStation={departStation}
+              arriveStation={arriveStation}
+            ></Schedule>
+          </Suspense>
+        </div>
+      )}
     </div>
   );
 }

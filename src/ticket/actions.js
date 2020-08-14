@@ -41,10 +41,10 @@ export function setDepartStation(departStation) {
     payload: departStation // action的参数
   };
 }
-export function setArriveStation(arrvieStation) {
+export function setArriveStation(arriveStation) {
   return {
     type: ACTION_SET_ARRVIE_STATION,
-    payload: arrvieStation // action的参数
+    payload: arriveStation // action的参数
   };
 }
 export function setTrainNumber(trainNumber) {
@@ -75,6 +75,7 @@ export function setIsScheduleVisible(isScheduleVisible) {
 export function toggleIsScheduleVisible() {
   return (dispatch, getState) => {
     const { isScheduleVisible } = getState();
+
     dispatch(setIsScheduleVisible(!isScheduleVisible));
   };
 }

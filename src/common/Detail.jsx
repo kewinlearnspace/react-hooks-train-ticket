@@ -17,7 +17,7 @@ const Detail = memo(function Detail(props) {
     arriveTimeStr,
     trainNumber,
     departStation,
-    arrvieStation,
+    arriveStation,
     durationStr,
     toggleIsScheduleVisible
   } = props;
@@ -43,7 +43,7 @@ const Detail = memo(function Detail(props) {
           <p className="train-time">耗时{durationStr}</p>
         </div>
         <div className="right">
-          <p className="city">{arrvieStation}</p>
+          <p className="city">{arriveStation}</p>
           <p className="time">{arriveTimeStr}</p>
           <p className="date">{arriveDateStr}</p>
         </div>
@@ -59,7 +59,7 @@ Detail.prototype = {
   arriveTimeStr: PropTypes.string.isRequired,
   trainNumber: PropTypes.string.isRequired,
   departStation: PropTypes.string.isRequired,
-  arrvieStation: PropTypes.string.isRequired,
+  arriveStation: PropTypes.string.isRequired,
   durationStr: PropTypes.string.isRequired,
   toggleIsScheduleVisible: PropTypes.func.isRequired
 };
