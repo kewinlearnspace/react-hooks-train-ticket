@@ -100,17 +100,3 @@ export function prevDate() {
     dispatch(setDepartDate(h0(departDate) - 86400 * 1000))
   }
 }
-export function nextDate() {
-  return (dispatch, getState) => {
-    const { departDate } = getState()
-
-    dispatch(setDepartDate(h0(departDate) + 86400 * 1000))
-  }
-}
-export function prevDate() {
-  return (dispatch, getState) => {
-    const { departDate } = getState()
-
-    dispatch(setDepartDate(h0(departDate) - 86400 * 1000))
-  }
-}
