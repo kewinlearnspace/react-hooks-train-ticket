@@ -12,6 +12,7 @@ import Nav from "../common/Nav.jsx";
 import Detail from "../common/Detail.jsx";
 import Candidate from "./Candidate.jsx";
 // import Schedule from './Schedule.jsx'
+import { TrainContext } from "./context";
 
 import {
   setDepartStation,
@@ -140,6 +141,13 @@ function App(props) {
           durationStr={durationStr}
           {...detailCbs}
         ></Detail>
+      </div>
+      <div className="candidate-wrapper">
+        <TrainContext.Provider
+          value={{ trainNumber, departStation, arriveStation, departDate }}
+        >
+          <Candidate tickets={tickets}></Candidate>
+        </TrainContext.Provider>
       </div>
       {isScheduleVisible && (
         <div
