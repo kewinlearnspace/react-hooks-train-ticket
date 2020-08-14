@@ -1,5 +1,4 @@
 import { h0 } from '../common/fp'
-
 export const ACTION_SET_ARRIVE_DATE = 'SET_ARRIVE_DATE'
 export const ACTION_SET_DEPART_DATE = 'SET_DEPART_DATE'
 export const ACTION_SET_DEPART_TIME_STR = 'SET_DEPART_TIME_STR'
@@ -42,10 +41,10 @@ export function setDepartStation(departStation) {
     payload: departStation, // action的参数
   }
 }
-export function setArrvieStation(arrvieStation) {
+export function setArriveStation(arriveStation) {
   return {
     type: ACTION_SET_ARRVIE_STATION,
-    payload: arrvieStation, // action的参数
+    payload: arriveStation, // action的参数
   }
 }
 export function setTrainNumber(trainNumber) {
@@ -76,6 +75,7 @@ export function setIsScheduleVisible(isScheduleVisible) {
 export function toggleIsScheduleVisible() {
   return (dispatch, getState) => {
     const { isScheduleVisible } = getState()
+
     dispatch(setIsScheduleVisible(!isScheduleVisible))
   }
 }
@@ -83,6 +83,21 @@ export function setSearchParsed(searchParsed) {
   return {
     type: ACTION_SET_SEARCH_PARSED,
     payload: searchParsed, // action的参数
+  }
+}
+
+export function nextDate() {
+  return (dispatch, getState) => {
+    const { departDate } = getState()
+
+    dispatch(setDepartDate(h0(departDate) + 86400 * 1000))
+  }
+}
+export function prevDate() {
+  return (dispatch, getState) => {
+    const { departDate } = getState()
+
+    dispatch(setDepartDate(h0(departDate) - 86400 * 1000))
   }
 }
 export function nextDate() {

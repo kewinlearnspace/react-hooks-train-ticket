@@ -1,0 +1,17 @@
+.header-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.detail-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 44px;
+}
+.app-content {
+  padding-bottom: 60px;
+}

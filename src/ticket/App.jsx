@@ -1,21 +1,22 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo, lazy, Suspense } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import URI from 'urijs'
 import dayjs from 'dayjs'
 import './App.css'
 
 import { h0 } from '../common/fp'
 import useNav from '../common/useNav'
-
 import Header from '../common/Header.jsx'
 import Nav from '../common/Nav.jsx'
 import Detail from '../common/Detail.jsx'
 import Candidate from './Candidate.jsx'
-import Schedule from './Schedule.jsx'
+// import Schedule from './Schedule.jsx'
+import { TrainContext } from './context'
 
 import {
   setDepartStation,
-  setArrvieStation,
+  setArriveStation,
   setTrainNumber,
   setDepartDate,
   setSearchParsed,
@@ -26,7 +27,10 @@ import {
   setArriveDate,
   setDurationStr,
   setTickets,
+  toggleIsScheduleVisible,
 } from './actions'
+// 异步加载组件
+const Schedule = lazy(() => import('./Schedule.jsx'))
 
 function App(props) {
   const {
@@ -35,7 +39,7 @@ function App(props) {
     departTimeStr,
     arriveTimeStr,
     departStation,
-    arrvieStation,
+    arriveStation,
     trainNumber,
     durationStr,
     tickets,
@@ -44,25 +48,23 @@ function App(props) {
     dispatch,
   } = props
 
-  // 解析URL属于副作用的一种所以在useEffect内操作
-  useEffect(() => {
-    const { aStation, dStation, date, trainNumber } = URI.parseQuery(window.location.search)
+  const onBack = useCallback(() => {
+    window.history.back()
+  }, [])
 
-    // 将获取的值存储到store中
+  useEffect(() => {
+    const { aStation, dStation, trainNumber, date } = URI.parseQuery(window.location.search)
     dispatch(setDepartStation(dStation))
-    dispatch(setArrvieStation(aStation))
+    dispatch(setArriveStation(aStation))
     dispatch(setTrainNumber(trainNumber))
     dispatch(setDepartDate(h0(dayjs(date).valueOf())))
+
     dispatch(setSearchParsed(true))
   }, [])
 
   useEffect(() => {
     document.title = trainNumber
   }, [trainNumber])
-
-  const onBack = useCallback(() => {
-    window.history.back()
-  }, [])
 
   useEffect(() => {
     if (!searchParsed) {
@@ -74,10 +76,8 @@ function App(props) {
       .toString()
 
     fetch(url)
-      .then((response) => response.json())
-      .then((result) => {
-        const { detail, candidates } = result
-
+      .then((res) => res.json())
+      .then(({ detail, candidates }) => {
         const { departTimeStr, arriveTimeStr, arriveDate, durationStr } = detail
 
         dispatch(setDepartTimeStr(departTimeStr))
@@ -94,6 +94,17 @@ function App(props) {
     prevDate,
     nextDate
   )
+
+  // toggleIsScheduleVisible绑定到一起
+  const detailCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        toggleIsScheduleVisible,
+      },
+      dispatch
+    )
+  }, [])
+
   if (!searchParsed) {
     return null
   }
@@ -111,6 +122,42 @@ function App(props) {
           next={next}
         />
       </div>
+      <div className="detail-wrapper">
+        <Detail
+          departDate={departDate}
+          arriveDate={arriveDate}
+          departTimeStr={departTimeStr}
+          arriveTimeStr={arriveTimeStr}
+          trainNumber={trainNumber}
+          departStation={departStation}
+          arriveStation={arriveStation}
+          durationStr={durationStr}
+        >
+          <span className="left"></span>
+          <span className="schedule" onClick={() => detailCbs.toggleIsScheduleVisible()}>
+            时刻表
+          </span>
+          <span className="right"></span>
+        </Detail>
+      </div>
+      <div className="candidate-wrapper">
+        <TrainContext.Provider value={{ trainNumber, departStation, arriveStation, departDate }}>
+          <Candidate tickets={tickets}></Candidate>
+        </TrainContext.Provider>
+      </div>
+      {isScheduleVisible && (
+        <div className="mask" onClick={() => dispatch(toggleIsScheduleVisible())}>
+          {/* 异步组件 */}
+          <Suspense fallback={<div>loading</div>}>
+            <Schedule
+              date={departDate}
+              trainNumber={trainNumber}
+              departStation={departStation}
+              arriveStation={arriveStation}
+            ></Schedule>
+          </Suspense>
+        </div>
+      )}
     </div>
   )
 }
