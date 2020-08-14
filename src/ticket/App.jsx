@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import URI from "urijs";
 import dayjs from "dayjs";
 import "./App.css";
@@ -90,30 +91,6 @@ function App(props) {
         dispatch(setTickets(candidates));
       });
   }, [searchParsed, departDate, trainNumber]);
-  // useEffect(() => {
-  //   if (!searchParsed) {
-  //     return
-  //   }
-
-  //   const url = new URI('/rest/ticket')
-  //     .setSearch('date', dayjs(departDate).format('YYYY-MM-DD'))
-  //     .setSearch('trainNumber', trainNumber)
-  //     .toString()
-
-  //   fetch(url)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       const { detail, candidates } = result
-
-  //       const { departTimeStr, arriveTimeStr, arriveDate, durationStr } = detail
-
-  //       dispatch(setDepartTimeStr(departTimeStr))
-  //       dispatch(setArriveTimeStr(arriveTimeStr))
-  //       dispatch(setArriveDate(arriveDate))
-  //       dispatch(setDurationStr(durationStr))
-  //       dispatch(setTickets(candidates))
-  //     })
-  // }, [searchParsed, departDate, trainNumber])
 
   const { isPrevDisabled, isNextDisabled, prev, next } = useNav(
     departDate,
@@ -121,6 +98,16 @@ function App(props) {
     prevDate,
     nextDate
   );
+
+  // toggleIsScheduleVisible绑定到一起
+  const detailCbs = useMemo(() => {
+    bindActionCreators(
+      {
+        toggleIsScheduleVisible
+      },
+      dispatch
+    );
+  }, []);
 
   if (!searchParsed) {
     return null;
@@ -138,6 +125,19 @@ function App(props) {
           prev={prev}
           next={next}
         />
+      </div>
+      <div className="detial-wrapper">
+        <Detail
+          departDate={departDate}
+          arriveDate={arriveDate}
+          departTimeStr={departTimeStr}
+          arriveTimeStr={arriveTimeStr}
+          trainNumber={trainNumber}
+          departStation={departStation}
+          arrvieStation={arrvieStation}
+          durationStr={durationStr}
+          {...detailCbs}
+        ></Detail>
       </div>
     </div>
   );
