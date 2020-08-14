@@ -11,7 +11,7 @@ export const ACTION_SET_PRICE = "SET_PRICE";
 export const ACTION_SET_PASSENGERS = "SET_PASSENGERS";
 export const ACTION_SET_MENU = "SET_MENU";
 export const ACTION_SET_IS_MENU_VISIBLE = "SET_IS_MENU_VISIBLE";
-export const ACTION_SET_SEARCH_TYPE = "SET_SEARCH_TYPE";
+export const ACTION_SET_SEARCH_PARSED = "SET_SEARCH_PARSED";
 
 export function setTrainNumber(trainNumber) {
   return {
@@ -91,9 +91,25 @@ export function setIsMenuVisible(isMenuVisible) {
     payload: isMenuVisible
   };
 }
-export function setSearchType(searchType) {
+export function setSearchParsed(searchParsed) {
   return {
-    type: ACTION_SET_SEARCH_TYPE,
-    payload: searchType
+    type: ACTION_SET_SEARCH_PARSED,
+    payload: searchParsed
+  };
+}
+
+export function fetchInitial(url) {
+  return (dispatch, getState) => {
+    fetch(url)
+      .then(res => res.json())
+      .then(
+        ({ departTimeStr, arriveTimeStr, arriveDate, durationStr, price }) => {
+          dispatch(setDepartTimeStr(departTimeStr));
+          dispatch(setArriveTimeStr(arriveTimeStr));
+          dispatch(setArriveDate(arriveDate));
+          dispatch(setDurationStr(durationStr));
+          dispatch(setPrice(price));
+        }
+      );
   };
 }

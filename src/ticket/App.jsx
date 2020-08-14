@@ -139,8 +139,16 @@ function App(props) {
           departStation={departStation}
           arriveStation={arriveStation}
           durationStr={durationStr}
-          {...detailCbs}
-        ></Detail>
+        >
+          <span className="left"></span>
+          <span
+            className="schedule"
+            onClick={() => detailCbs.toggleIsScheduleVisible()}
+          >
+            时刻表
+          </span>
+          <span className="right"></span>
+        </Detail>
       </div>
       <div className="candidate-wrapper">
         <TrainContext.Provider

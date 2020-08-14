@@ -12,7 +12,7 @@ import {
   ACTION_SET_PASSENGERS,
   ACTION_SET_MENU,
   ACTION_SET_IS_MENU_VISIBLE,
-  ACTION_SET_SEARCH_TYPE
+  ACTION_SET_SEARCH_PARSED
 } from "./actions";
 export default {
   trainNumber(state = null, action) {
@@ -132,10 +132,10 @@ export default {
     }
     return state;
   },
-  searchType(state = false, action) {
+  searchParsed(state = false, action) {
     const { type, payload } = action;
     switch (type) {
-      case ACTION_SET_SEARCH_TYPE:
+      case ACTION_SET_SEARCH_PARSED:
         return payload;
       default:
     }
