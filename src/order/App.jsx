@@ -9,6 +9,7 @@ import Account from './Account.jsx'
 import Choose from './Choose.jsx'
 import Passengers from './Passengers.jsx'
 import Ticket from './Ticket.jsx'
+import Menu from './Menu.jsx'
 
 import {
   setDepartStation,
@@ -79,16 +80,22 @@ function App(props) {
     dispatch(fetchInitial(url))
   }, [searchParsed, departStation, arriveStation, seatType, departDate])
 
-  const passengersCbd = useMemo(() => {
+  const passengersCbs = useMemo(() => {
     return bindActionCreators(
       {
         createAdult,
         createChild,
         removePassenger,
         updatePassenger,
+        showGenderMenu,
+        showFollowAdultMenu,
+        showTicketTypeMenu,
       },
       dispatch
     )
+  }, [])
+  const menuCbs = useMemo(() => {
+    return bindActionCreators({ hideMenu }, dispatch)
   }, [])
   if (!searchParsed) {
     return null
@@ -113,7 +120,8 @@ function App(props) {
         </Detail>
       </div>
       <Ticket price={price} type={seatType}></Ticket>
-      <Passengers passengers={passengers} {...passengersCbd}></Passengers>
+      <Passengers passengers={passengers} {...passengersCbs}></Passengers>
+      <Menu show={isMenuVisible} {...menu} {...menuCbs}></Menu>
     </div>
   )
 }

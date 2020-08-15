@@ -190,8 +190,14 @@ export function removePassenger(id) {
     dispatch(setPassengers(newPassengers))
   }
 }
-// 增加乘客信息
-export function updatePassenger(id, data) {
+
+/**
+ * @description 增加乘客信息
+ * @param {*} id 更新数据的id
+ * @param {*} data 更新数据的集合
+ * @param {*} keysToBeRemoved 需要删除字段的集合
+ */
+export function updatePassenger(id, data, keysToBeRemoved = []) {
   return (dispatch, getState) => {
     const { passengers } = getState()
     for (let i = 0; i < passengers.length; ++i) {
@@ -199,9 +205,139 @@ export function updatePassenger(id, data) {
         const newPassengers = [...passengers]
         // onchang方法会在输入时一直触发,所以需要一直覆盖原来的值
         newPassengers[i] = Object.assign({}, passengers[i], data)
+        for (let key of keysToBeRemoved) {
+          delete newPassengers[i][key]
+        }
         dispatch(setPassengers(newPassengers))
         break
       }
     }
+  }
+}
+
+export function showMenu(menu) {
+  return (dispatch) => {
+    dispatch(setMenu(menu))
+    dispatch(setIsMenuVisible(true))
+  }
+}
+
+export function hideMenu() {
+  return setIsMenuVisible(false)
+}
+
+// 性别弹出菜单
+export function showGenderMenu(id) {
+  return (dispatch, getState) => {
+    const { passengers } = getState()
+    const passenger = passengers.find((passenger) => passenger.id === id)
+    if (!passenger) {
+      return
+    }
+    dispatch(
+      showMenu({
+        onPress(gender) {
+          dispatch(updatePassenger(id, { gender }))
+          dispatch(hideMenu())
+        },
+        options: [
+          {
+            title: '男',
+            value: 'male',
+            active: 'male' === passenger.gender,
+          },
+          {
+            title: '女',
+            value: 'female',
+            active: 'female' === passenger.gender,
+          },
+        ],
+      })
+    )
+  }
+}
+
+// 同行成人
+export function showFollowAdultMenu(id) {
+  return (dispatch, getState) => {
+    const { passengers } = getState()
+    const passenger = passengers.find((passenger) => passenger.id === id)
+    if (!passenger) {
+      return
+    }
+    dispatch(
+      showMenu({
+        onPress(followAdult) {
+          dispatch(updatePassenger(id, { followAdult }))
+          dispatch(hideMenu())
+        },
+        options: passengers
+          .filter((passenger) => passenger.ticketType === 'adult')
+          .map((adult) => {
+            return {
+              title: adult.name,
+              value: adult.id,
+              active: adult.id === passenger.followAdult,
+            }
+          }),
+      })
+    )
+  }
+}
+
+// 票型选择弹窗
+export function showTicketTypeMenu(id) {
+  return (dispatch, getState) => {
+    const { passengers } = getState()
+    const passenger = passengers.find((passenger) => passenger.id === id)
+    if (!passenger) {
+      return
+    }
+    dispatch(
+      showMenu({
+        onPress(ticketType) {
+          // 儿童切换成成人
+          if ('adult' === ticketType) {
+            dispatch(
+              updatePassenger(id, { ticketType, licenceNo: '' }, [
+                'gender',
+                'followAdult',
+                'birthday',
+              ])
+            )
+          } else {
+            // 成人切换成儿童
+            // 1.除去自己还有无其他成人
+            const adult = passengers.find(
+              (passenger) => passenger.id !== id && passenger.ticketType === 'adult'
+            )
+            if (adult) {
+              dispatch(
+                updatePassenger(
+                  id,
+                  { ticketType, gender: '', followAdult: adult.id, birthday: '' },
+                  ['licenceNo']
+                )
+              )
+            } else {
+              alert('没有其他成人乘客')
+            }
+          }
+          dispatch(hideMenu())
+        },
+        options: [
+          {
+            title: '成人票',
+            value: 'adult',
+            active: 'adult' === passenger.ticketType,
+          },
+          {
+            title: '儿童票',
+            value: 'child',
+            active: 'child' === passenger.ticketType,
+          },
+        ],
+      })
+    )
   }
 }
