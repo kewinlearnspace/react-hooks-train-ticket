@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 /**
  * 监听浏览器窗口变化的hooks函数
  */
@@ -12,9 +12,9 @@ export default function useWinSize() {
   }
 
   useEffect(() => {
-    window.addEventListener("resize", onResize, false);
+    window.addEventListener('resize', onResize, false);
     return () => {
-      window.removeEventListener("resize", onResize, false);
+      window.removeEventListener('resize', onResize, false);
     };
   }, []);
   return { width, height };

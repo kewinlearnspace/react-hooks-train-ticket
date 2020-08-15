@@ -1,15 +1,15 @@
-import React, { memo, useState, useMemo, useReducer } from "react";
-import PropTypes from "prop-types";
-import classnames from "classnames";
-import "./Bottom.css";
-import { ORDER_DEPART } from "./constant";
-import Slider from "./Slider.jsx";
+import React, { memo, useState, useMemo, useReducer } from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import './Bottom.css';
+import { ORDER_DEPART } from './constant';
+import Slider from './Slider.jsx';
 
 function checkedReducer(state, action) {
   const { type, payload } = action;
   let newState;
   switch (type) {
-    case "toggle":
+    case 'toggle':
       newState = { ...state };
       if (payload in newState) {
         delete newState[payload];
@@ -17,7 +17,7 @@ function checkedReducer(state, action) {
         newState[payload] = true;
       }
       return newState;
-    case "reset":
+    case 'reset':
       return {};
     default:
   }
@@ -29,7 +29,7 @@ const Filter = memo(function Filter(props) {
   return (
     <li
       className={classnames({ checked })}
-      onClick={() => dispatch({ payload: value, type: "toggle" })}
+      onClick={() => dispatch({ payload: value, type: 'toggle' })}
     >
       {name}
     </li>
@@ -40,7 +40,7 @@ Filter.propTypes = {
   checked: PropTypes.bool.isRequired,
   value: PropTypes.string.isRequired,
   // toggle: PropTypes.func.isRequired,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
 };
 
 const Option = memo(function Option(props) {
@@ -79,7 +79,7 @@ Option.propTypes = {
   options: PropTypes.array.isRequired,
   checkedMap: PropTypes.object.isRequired,
   // update: PropTypes.func.isRequired,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
 };
 
 const BottomModal = memo(function BottomModal(props) {
@@ -104,7 +104,7 @@ const BottomModal = memo(function BottomModal(props) {
     setDepartTimeEnd,
     setArriveTimeStart,
     setArriveTimeEnd,
-    toggleIsFiltersVisible
+    toggleIsFiltersVisible,
   } = props;
 
   // useState
@@ -129,19 +129,19 @@ const BottomModal = memo(function BottomModal(props) {
     checkedTicketTypes,
     checkedTicketTypes => {
       return {
-        ...checkedTicketTypes
+        ...checkedTicketTypes,
       };
     }
   );
   const [
     localCheckedArriveStations,
-    localCheckedArriveStationsDispatch
+    localCheckedArriveStationsDispatch,
   ] = useReducer(
     checkedReducer,
     checkedArriveStations,
     checkedArriveStations => {
       return {
-        ...checkedArriveStations
+        ...checkedArriveStations,
       };
     }
   );
@@ -151,20 +151,20 @@ const BottomModal = memo(function BottomModal(props) {
     checkedTrainTypes,
     checkedTrainTypes => {
       return {
-        ...checkedTrainTypes
+        ...checkedTrainTypes,
       };
     }
   );
 
   const [
     localCheckedDepartStations,
-    localCheckedDepartStationsDispatch
+    localCheckedDepartStationsDispatch,
   ] = useReducer(
     checkedReducer,
     checkedDepartStations,
     checkedDepartStations => {
       return {
-        ...checkedDepartStations
+        ...checkedDepartStations,
       };
     }
   );
@@ -183,37 +183,37 @@ const BottomModal = memo(function BottomModal(props) {
 
   const optionGroup = [
     {
-      title: "坐席类型",
+      title: '坐席类型',
       options: ticketTypes,
       // checkedMap: checkedTicketTypes,
       checkedMap: localCheckedTicketTypes,
       // update: setLocalCheckedTicketTypes,
-      dispatch: localCheckedTicketTypesDispatch
+      dispatch: localCheckedTicketTypesDispatch,
     },
     {
-      title: "车次类型",
+      title: '车次类型',
       options: trainTypes,
       // checkedMap: checkedTrainTypes,
       checkedMap: localCheckedTrainTypes,
       // update: setLocalCheckedTrainTypes,
-      dispatch: localCheckedTrainTypesDispatch
+      dispatch: localCheckedTrainTypesDispatch,
     },
     {
-      title: "出发车站",
+      title: '出发车站',
       options: departStations,
       // checkedMap: checkedDepartStations,
       checkedMap: localCheckedDepartStations,
       // update: setLocalCheckedDepartStations,
-      dispatch: localCheckedDepartStationsDispatch
+      dispatch: localCheckedDepartStationsDispatch,
     },
     {
-      title: "到达车站",
+      title: '到达车站',
       options: arriveStations,
       // checkedMap: checkedArriveStations,
       checkedMap: localCheckedArriveStations,
       // update: setLocalCheckedArriveStations,
-      dispatch: localCheckedArriveStationsDispatch
-    }
+      dispatch: localCheckedArriveStationsDispatch,
+    },
   ];
 
   function sure() {
@@ -250,7 +250,7 @@ const BottomModal = memo(function BottomModal(props) {
     localDepartTimeStart,
     localDepartTimeEnd,
     localArriveTimeStart,
-    localArriveTimeEnd
+    localArriveTimeEnd,
   ]);
 
   function reset() {
@@ -258,10 +258,10 @@ const BottomModal = memo(function BottomModal(props) {
       return;
     }
     // useReducer
-    localCheckedTicketTypesDispatch({ type: "reset" });
-    localCheckedTrainTypesDispatch({ type: "reset" });
-    localCheckedDepartStationsDispatch({ type: "reset" });
-    localCheckedArriveStationsDispatch({ type: "reset" });
+    localCheckedTicketTypesDispatch({ type: 'reset' });
+    localCheckedTrainTypesDispatch({ type: 'reset' });
+    localCheckedDepartStationsDispatch({ type: 'reset' });
+    localCheckedArriveStationsDispatch({ type: 'reset' });
     // useState
     // setLocalCheckedTicketTypes({})
     // setLocalCheckedTrainTypes({})
@@ -279,8 +279,8 @@ const BottomModal = memo(function BottomModal(props) {
         <div className="bottom-dialog-content">
           <div className="title">
             <span
-              className={classnames("reset", {
-                disabled: isResetDisabled
+              className={classnames('reset', {
+                disabled: isResetDisabled,
               })}
               onClick={reset}
             >
@@ -336,7 +336,7 @@ BottomModal.propTypes = {
   setDepartTimeEnd: PropTypes.func.isRequired,
   setArriveTimeStart: PropTypes.func.isRequired,
   setArriveTimeEnd: PropTypes.func.isRequired,
-  toggleIsFiltersVisible: PropTypes.func.isRequired
+  toggleIsFiltersVisible: PropTypes.func.isRequired,
 };
 
 export default function Bottom(props) {
@@ -368,7 +368,7 @@ export default function Bottom(props) {
     setDepartTimeStart,
     setDepartTimeEnd,
     setArriveTimeStart,
-    setArriveTimeEnd
+    setArriveTimeEnd,
   } = props;
 
   const noChecked = useMemo(() => {
@@ -390,36 +390,36 @@ export default function Bottom(props) {
     departTimeStart,
     departTimeEnd,
     arriveTimeStart,
-    arriveTimeEnd
+    arriveTimeEnd,
   ]);
   return (
     <div className="bottom">
       <div className="bottom-filters">
         <span className="item" onClick={toggleOrderType}>
           <i className="icon">&#xf065;</i>
-          {orderType === ORDER_DEPART ? "出发 早->晚" : "耗时 短->长"}
+          {orderType === ORDER_DEPART ? '出发 早->晚' : '耗时 短->长'}
         </span>
         <span
-          className={classnames("item", { "item-on": highSpeed })}
+          className={classnames('item', { 'item-on': highSpeed })}
           onClick={toggleHighSpeed}
         >
-          <i className="icon">{highSpeed ? "\uf43f" : "\uf43e"}</i>
+          <i className="icon">{highSpeed ? '\uf43f' : '\uf43e'}</i>
           只看高铁动车
         </span>
         <span
-          className={classnames("item", { "item-on": onlyTickets })}
+          className={classnames('item', { 'item-on': onlyTickets })}
           onClick={toggleOnlyTickets}
         >
-          <i className="icon">{onlyTickets ? "\uf43d" : "\uf43c"}</i>
+          <i className="icon">{onlyTickets ? '\uf43d' : '\uf43c'}</i>
           只看有票
         </span>
         <span
-          className={classnames("item", {
-            "item-on": isFiltersVisible || !noChecked
+          className={classnames('item', {
+            'item-on': isFiltersVisible || !noChecked,
           })}
           onClick={toggleIsFiltersVisible}
         >
-          <i className="icon">{noChecked ? "\uf0f7" : "\uf446"}</i>
+          <i className="icon">{noChecked ? '\uf0f7' : '\uf446'}</i>
           综合筛选
         </span>
       </div>
@@ -481,5 +481,5 @@ Bottom.prototype = {
   setDepartTimeStart: PropTypes.func.isRequired,
   setDepartTimeEnd: PropTypes.func.isRequired,
   setArriveTimeStart: PropTypes.func.isRequired,
-  setArriveTimeEnd: PropTypes.func.isRequired
+  setArriveTimeEnd: PropTypes.func.isRequired,
 };

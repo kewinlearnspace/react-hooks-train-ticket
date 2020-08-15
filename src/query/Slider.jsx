@@ -1,10 +1,10 @@
-import React, { memo, useState, useMemo, useRef, useEffect } from "react";
-import PropTyeps from "prop-types";
-import leftPad from "left-pad";
+import React, { memo, useState, useMemo, useRef, useEffect } from 'react';
+import PropTyeps from 'prop-types';
+import leftPad from 'left-pad';
 
-import useWinSize from "../common/useWinSize.js";
+import useWinSize from '../common/useWinSize.js';
 
-import "./Slider.css";
+import './Slider.css';
 
 const Slider = memo(function Slider(props) {
   const {
@@ -12,7 +12,7 @@ const Slider = memo(function Slider(props) {
     currentStartHours,
     currentEndHours,
     onStartChange,
-    onEndChange
+    onEndChange,
   } = props;
 
   const winSize = useWinSize();
@@ -71,10 +71,10 @@ const Slider = memo(function Slider(props) {
   }, [endPercent]);
 
   const startText = useMemo(() => {
-    return leftPad(startHours, 2, "0") + ":00";
+    return leftPad(startHours, 2, '0') + ':00';
   }, [startHours]);
   const endText = useMemo(() => {
-    return leftPad(endHours, 2, "0") + ":00";
+    return leftPad(endHours, 2, '0') + ':00';
   }, [endHours]);
   function onStartTouchBegin(e) {
     // 设置横坐标的初始值
@@ -113,32 +113,32 @@ const Slider = memo(function Slider(props) {
   useEffect(() => {
     // 左侧滑块监听事件
     startHandle.current.addEventListener(
-      "touchstart",
+      'touchstart',
       onStartTouchBegin,
       false
     );
-    startHandle.current.addEventListener("touchmove", onStartTouchMove, false);
+    startHandle.current.addEventListener('touchmove', onStartTouchMove, false);
     // 右侧滑块监听事件
-    endHandle.current.addEventListener("touchstart", onEndTouchBegin, false);
-    endHandle.current.addEventListener("touchmove", onEndTouchMove, false);
+    endHandle.current.addEventListener('touchstart', onEndTouchBegin, false);
+    endHandle.current.addEventListener('touchmove', onEndTouchMove, false);
     return () => {
       // 事件解绑
       startHandle.current.removeEventListener(
-        "touchstart",
+        'touchstart',
         onStartTouchBegin,
         false
       );
       startHandle.current.removeEventListener(
-        "touchmove",
+        'touchmove',
         onStartTouchMove,
         false
       );
       endHandle.current.removeEventListener(
-        "touchstart",
+        'touchstart',
         onEndTouchBegin,
         false
       );
-      endHandle.current.removeEventListener("touchmove", onEndTouchMove, false);
+      endHandle.current.removeEventListener('touchmove', onEndTouchMove, false);
     };
   });
 
@@ -157,21 +157,21 @@ const Slider = memo(function Slider(props) {
           <div
             className="slider-range"
             style={{
-              left: startPercent + "%",
-              width: endPercent - startPercent + "%"
+              left: startPercent + '%',
+              width: endPercent - startPercent + '%',
             }}
           ></div>
           <i
             ref={startHandle}
             className="slider-handle"
-            style={{ left: startPercent + "%" }}
+            style={{ left: startPercent + '%' }}
           >
             <span>{startText}</span>
           </i>
           <i
             ref={endHandle}
             className="slider-handle"
-            style={{ left: endPercent + "%" }}
+            style={{ left: endPercent + '%' }}
           >
             <span>{endText}</span>
           </i>
@@ -186,7 +186,7 @@ Slider.prototype = {
   currentStartHours: PropTyeps.number.isRequired,
   currentEndHours: PropTyeps.number.isRequired,
   onStartChange: PropTyeps.func.isRequired,
-  onEndChange: PropTyeps.func.isRequired
+  onEndChange: PropTyeps.func.isRequired,
 };
 
 export default Slider;

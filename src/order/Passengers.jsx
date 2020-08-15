@@ -1,12 +1,11 @@
-import React, { memo, useMemo } from 'react'
-import PropTypes from 'prop-types'
-import './Passengers.css'
+import React, { memo, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import './Passengers.css';
 
 const Passenger = memo(function Passenger(props) {
   const {
     id,
     name,
-    followAdult,
     followAdultName,
     ticketType,
     licenceNo,
@@ -17,8 +16,8 @@ const Passenger = memo(function Passenger(props) {
     showGenderMenu,
     showFollowAdultMenu,
     showTicketTypeMenu,
-  } = props
-  const isAdult = ticketType === 'adult'
+  } = props;
+  const isAdult = ticketType === 'adult';
   return (
     <li className="passenger">
       <i className="delete" onClick={() => onRemove(id)}>
@@ -32,7 +31,7 @@ const Passenger = memo(function Passenger(props) {
             className="input name"
             placeholder="乘客姓名"
             value={name}
-            onChange={(e) => onUpdate(id, { name: e.target.value })}
+            onChange={e => onUpdate(id, { name: e.target.value })}
           />
           <label className="ticket-type" onClick={() => showTicketTypeMenu(id)}>
             {isAdult ? '成人票' : ' 儿童票'}
@@ -46,7 +45,7 @@ const Passenger = memo(function Passenger(props) {
               className="input licenceNo"
               placeholder="证件号码"
               value={licenceNo}
-              onChange={(e) => onUpdate(id, { licenceNo: e.target.value })}
+              onChange={e => onUpdate(id, { licenceNo: e.target.value })}
             />
           </li>
         )}
@@ -71,7 +70,7 @@ const Passenger = memo(function Passenger(props) {
               className="input birthday"
               placeholder="如 19951015"
               value={birthday}
-              onChange={(e) => onUpdate(id, { birthday: e.target.value })}
+              onChange={e => onUpdate(id, { birthday: e.target.value })}
             />
           </li>
         )}
@@ -90,8 +89,8 @@ const Passenger = memo(function Passenger(props) {
         )}
       </ol>
     </li>
-  )
-})
+  );
+});
 Passenger.prototype = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
@@ -106,7 +105,7 @@ Passenger.prototype = {
   showGenderMenu: PropTypes.func.isRequired,
   showFollowAdultMenu: PropTypes.func.isRequired,
   showTicketTypeMenu: PropTypes.func.isRequired,
-}
+};
 
 const Passengers = memo(function Passengers(props) {
   const {
@@ -118,20 +117,20 @@ const Passengers = memo(function Passengers(props) {
     showGenderMenu,
     showFollowAdultMenu,
     showTicketTypeMenu,
-  } = props
+  } = props;
 
   //构造id与名称的映射
   const nameMap = useMemo(() => {
-    const res = {}
+    const res = {};
     for (let passenger of passengers) {
-      res[passenger.id] = passenger.name
+      res[passenger.id] = passenger.name;
     }
-    return res
-  }, [passengers])
+    return res;
+  }, [passengers]);
   return (
     <div className="passengers">
       <ul>
-        {passengers.map((passenger) => (
+        {passengers.map(passenger => (
           <Passenger
             key={passenger.id}
             {...passenger}
@@ -153,8 +152,8 @@ const Passengers = memo(function Passengers(props) {
         </span>
       </section>
     </div>
-  )
-})
+  );
+});
 
 Passengers.prototype = {
   passengers: PropTypes.array.isRequired,
@@ -163,6 +162,6 @@ Passengers.prototype = {
   showGenderMenu: PropTypes.func.isRequired,
   showFollowAdultMenu: PropTypes.func.isRequired,
   showTicketTypeMenu: PropTypes.func.isRequired,
-}
+};
 
-export default Passengers
+export default Passengers;

@@ -1,16 +1,18 @@
-import React, { memo } from 'react'
-import PropTypes from 'prop-types'
-import classnames from 'classnames'
-import './Choose.css'
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import './Choose.css';
 
 const Seat = memo(function Seat(props) {
-  const { passengers, updatePassenger, seatType } = props
+  const { passengers, updatePassenger, seatType } = props;
   return (
     <div>
-      {passengers.map((passenger) => (
+      {passengers.map(passenger => (
         <p
           key={passenger.id}
-          className={classnames('seat', { active: passenger.seat === seatType })}
+          className={classnames('seat', {
+            active: passenger.seat === seatType,
+          })}
           data-text={seatType}
           onClick={() => updatePassenger(passenger.id, { seat: seatType })}
         >
@@ -19,16 +21,16 @@ const Seat = memo(function Seat(props) {
         </p>
       ))}
     </div>
-  )
-})
+  );
+});
 
 Seat.prototype = {
   passengers: PropTypes.array.isRequired,
   updatePassenger: PropTypes.func.isRequired,
   seatType: PropTypes.string.isRequired,
-}
+};
 const Choose = memo(function Choose(props) {
-  const { passengers, updatePassenger } = props
+  const { passengers, updatePassenger } = props;
 
   // function creataSeat(seatType) {
   //   return (
@@ -56,7 +58,7 @@ const Choose = memo(function Choose(props) {
           {/* {creataSeat('A')}
           {creataSeat('B')}
           {creataSeat('C')} */}
-          {['A', 'B', 'C'].map((seatType) => (
+          {['A', 'B', 'C'].map(seatType => (
             <Seat
               passengers={passengers}
               updatePassenger={updatePassenger}
@@ -66,7 +68,7 @@ const Choose = memo(function Choose(props) {
           <div>过道</div>
           {/* {creataSeat('D')}
           {creataSeat('F')} */}
-          {['D', 'F'].map((seatType) => (
+          {['D', 'F'].map(seatType => (
             <Seat
               passengers={passengers}
               updatePassenger={updatePassenger}
@@ -77,12 +79,12 @@ const Choose = memo(function Choose(props) {
         </div>
       </div>
     </div>
-  )
-})
+  );
+});
 
 Choose.prototype = {
   passengers: PropTypes.array.isRequired,
   updatePassenger: PropTypes.func.isRequired,
-}
+};
 
-export default Choose
+export default Choose;

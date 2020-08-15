@@ -1,7 +1,7 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 
-import reducers from './reducers'
-import thunk from 'redux-thunk'
+import reducers from './reducers';
+import thunk from 'redux-thunk';
 
 /**
  * @param
@@ -23,4 +23,4 @@ export default createStore(
     highSpeed: false, // 高铁或动车
   },
   applyMiddleware(thunk)
-)
+);

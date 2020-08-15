@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
-import { connect } from 'react-redux'
-import URI from 'urijs'
-import './App.css'
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { connect } from 'react-redux';
+import URI from 'urijs';
+import './App.css';
 
-import Header from '../common/Header.jsx'
-import Detail from '../common/Detail.jsx'
-import Account from './Account.jsx'
-import Choose from './Choose.jsx'
-import Passengers from './Passengers.jsx'
-import Ticket from './Ticket.jsx'
-import Menu from './Menu.jsx'
+import Header from '../common/Header.jsx';
+import Detail from '../common/Detail.jsx';
+import Account from './Account.jsx';
+import Choose from './Choose.jsx';
+import Passengers from './Passengers.jsx';
+import Ticket from './Ticket.jsx';
+import Menu from './Menu.jsx';
 
 import {
   setDepartStation,
@@ -27,9 +27,9 @@ import {
   showGenderMenu,
   showFollowAdultMenu,
   showTicketTypeMenu,
-} from './actions'
-import dayjs from 'dayjs'
-import { bindActionCreators } from 'redux'
+} from './actions';
+import dayjs from 'dayjs';
+import { bindActionCreators } from 'redux';
 
 function App(props) {
   const {
@@ -48,36 +48,38 @@ function App(props) {
     isMenuVisible,
     searchParsed,
     dispatch,
-  } = props
+  } = props;
   // 由于onBack没有引用到任何可变的变量,所以第二个参数为空
   const onBack = useCallback(() => {
-    window.history.back()
-  }, [])
+    window.history.back();
+  }, []);
 
   useEffect(() => {
-    const { trainNumber, dStation, aStation, type, date } = URI.parseQuery(window.location.search)
+    const { trainNumber, dStation, aStation, type, date } = URI.parseQuery(
+      window.location.search
+    );
 
-    dispatch(setDepartStation(dStation))
-    dispatch(setArriveStation(aStation))
-    dispatch(setTrainNumber(trainNumber))
-    dispatch(setSeatType(type))
-    dispatch(setDepartDate(dayjs(date).valueOf()))
-    dispatch(setSearchParsed(true))
-  }, [])
+    dispatch(setDepartStation(dStation));
+    dispatch(setArriveStation(aStation));
+    dispatch(setTrainNumber(trainNumber));
+    dispatch(setSeatType(type));
+    dispatch(setDepartDate(dayjs(date).valueOf()));
+    dispatch(setSearchParsed(true));
+  }, []);
 
   useEffect(() => {
     if (!searchParsed) {
-      return
+      return;
     }
     const url = new URI('/rest/order')
       .setSearch('dStation', departStation)
       .setSearch('aStation', arriveStation)
       .setSearch('type', seatType)
       .setSearch('date', dayjs(departDate).format('YYYY-MM-DD'))
-      .toString()
+      .toString();
     // actions中发送请求
-    dispatch(fetchInitial(url))
-  }, [searchParsed, departStation, arriveStation, seatType, departDate])
+    dispatch(fetchInitial(url));
+  }, [searchParsed, departStation, arriveStation, seatType, departDate]);
 
   const passengersCbs = useMemo(() => {
     return bindActionCreators(
@@ -91,19 +93,19 @@ function App(props) {
         showTicketTypeMenu,
       },
       dispatch
-    )
-  }, [])
+    );
+  }, []);
 
   const menuCbs = useMemo(() => {
-    return bindActionCreators({ hideMenu }, dispatch)
-  }, [])
+    return bindActionCreators({ hideMenu }, dispatch);
+  }, []);
 
   const chooseCbs = useMemo(() => {
-    return bindActionCreators({ updatePassenger }, dispatch)
-  }, [])
+    return bindActionCreators({ updatePassenger }, dispatch);
+  }, []);
 
   if (!searchParsed) {
-    return null
+    return null;
   }
   return (
     <div className="app">
@@ -126,18 +128,20 @@ function App(props) {
       </div>
       <Ticket price={price} type={seatType}></Ticket>
       <Passengers passengers={passengers} {...passengersCbs}></Passengers>
-      {passengers.length > 0 && <Choose passengers={passengers} {...chooseCbs}></Choose>}
+      {passengers.length > 0 && (
+        <Choose passengers={passengers} {...chooseCbs}></Choose>
+      )}
       <Account price={price} length={passengers.length}></Account>
       <Menu show={isMenuVisible} {...menu} {...menuCbs}></Menu>
     </div>
-  )
+  );
 }
 
 export default connect(
   function mapStateToProps(state) {
-    return state
+    return state;
   },
   function mapDispatchToProps(dispatch) {
-    return { dispatch }
+    return { dispatch };
   }
-)(App)
+)(App);

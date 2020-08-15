@@ -77,3 +77,58 @@ npm start
 
 - 发送 ajax、修改 dom 节点。还有....？？
 - 操作了组件上下文之外的东西也属于副作用的一种
+
+## 项目细节
+
+- package.json 的 script 中增加格式化验证
+  ```shell
+      "format": "prettier src/**/*.{js,jsx,css,md} --write && eslint src/**/*.{jsx,js} --fix"
+  ```
+- create-react-app 生成的项目只遵循了 eslint config `react-app`的规则。
+
+  - 通过配置`eslintConfig`中的`extends`可以增加新的集合。
+    ```json
+    "eslintConfig": {
+        "extends": [
+          "eslint:recommended",
+          "react-app"
+        ],
+    }
+    ```
+  - 除了引入`eslint`中的规则外。也可以复写规则
+
+  ```json
+  "eslintConfig": {
+    ....
+    "rules": {
+      "react/jsx-indent": [
+        "error",
+        2
+      ]
+    }
+  }
+  ```
+
+  - 使用`git hooks`代码提交时自动格式化(即执行 git 特定操作时,自动执行其他配置好的命令)
+    - 使用`npm i husky lint-staged -D`其中`husky`就是用来自动配置`git hooks`的,而`lint-staged`则是被`husky`调用专门针对被改动的文件执行操作的
+    ```json
+    //  package.json`直接定义
+    "husky": {
+      "hooks": {
+        "pre-commit": "lint-staged" // 提交时执行
+      }
+    },
+    "lint-staged": {
+      "*.{js,jsx}": [ // 后缀名相同的文件发生改变执行
+        "prettier --write",
+        "eslint --fix",
+        "git add"
+      ],
+      "*.{css,md}": [ // 后缀名相同的文件发生改变执行
+        "prettier --write",
+        "git add"
+      ]
+    },
+    ```
+    - **prettier** 配置参考
+      > https://prettier.io/docs/en/options.html#prose-wrap

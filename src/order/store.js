@@ -1,7 +1,7 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 
-import reducers from "./reducers";
-import thunk from "redux-thunk";
+import reducers from './reducers';
+import thunk from 'redux-thunk';
 
 export default createStore(
   combineReducers(reducers),
@@ -19,7 +19,7 @@ export default createStore(
     passengers: [], // 乘客信息
     menu: null, // 弹出菜单
     isMenuVisible: false, // 菜单是否可见
-    searchParsed: false // url参数是否解析完成
+    searchParsed: false, // url参数是否解析完成
   },
   applyMiddleware(thunk)
 );

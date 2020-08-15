@@ -1,10 +1,10 @@
-import React, { memo, useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import classnames from "classnames";
-import leftPad from "left-pad";
-import URI from "urijs";
-import dayjs from "dayjs";
-import "./Schedule.css";
+import React, { memo, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import leftPad from 'left-pad';
+import URI from 'urijs';
+import dayjs from 'dayjs';
+import './Schedule.css';
 
 const ScheduleRow = memo(function ScheduleRow(props) {
   const {
@@ -18,42 +18,42 @@ const ScheduleRow = memo(function ScheduleRow(props) {
     isDepartStation, // 出发站
     isArriveStation, // 抵达站
     beforeDepartStation,
-    afterArriveStation
+    afterArriveStation,
   } = props;
 
   return (
     <li>
       <div
-        className={classnames("icon", {
-          "icon-red": isDepartStation || isArriveStation
+        className={classnames('icon', {
+          'icon-red': isDepartStation || isArriveStation,
         })}
       >
         {isDepartStation
-          ? "出"
+          ? '出'
           : isArriveStation
-          ? "到"
-          : leftPad(index, 2, "0")}
+          ? '到'
+          : leftPad(index, 2, '0')}
       </div>
       <div
-        className={classnames("row", {
-          grey: beforeDepartStation || afterArriveStation
+        className={classnames('row', {
+          grey: beforeDepartStation || afterArriveStation,
         })}
       >
         <span
-          className={classnames("station", {
-            red: isArriveStation || isDepartStation
+          className={classnames('station', {
+            red: isArriveStation || isDepartStation,
           })}
         >
           {station}
         </span>
-        <span className={classnames("arrtime", { red: isArriveStation })}>
-          {isStartStation ? "始发站" : arriveTime}
+        <span className={classnames('arrtime', { red: isArriveStation })}>
+          {isStartStation ? '始发站' : arriveTime}
         </span>
-        <span className={classnames("deptime", { red: isDepartStation })}>
-          {isEndStation ? "终到站" : departTime}
+        <span className={classnames('deptime', { red: isDepartStation })}>
+          {isEndStation ? '终到站' : departTime}
         </span>
         <span className="stoptime">
-          {isStartStation || isEndStation ? "--" : stay + "分"}
+          {isStartStation || isEndStation ? '--' : stay + '分'}
         </span>
       </div>
     </li>
@@ -79,11 +79,11 @@ const Schedule = memo(function Schedule(props) {
   const [scheduleList, setScheduleList] = useState([]);
 
   useEffect(() => {
-    const url = new URI("/rest/schedule")
-      .setSearch("trainNumber", trainNumber)
-      .setSearch("departStation", departStation)
-      .setSearch("arriveStation", arriveStation)
-      .setSearch("date", dayjs(date).format("YYYY-MM-DD"))
+    const url = new URI('/rest/schedule')
+      .setSearch('trainNumber', trainNumber)
+      .setSearch('departStation', departStation)
+      .setSearch('arriveStation', arriveStation)
+      .setSearch('date', dayjs(date).format('YYYY-MM-DD'))
       .toString();
     fetch(url)
       .then(res => res.json())
@@ -99,7 +99,7 @@ const Schedule = memo(function Schedule(props) {
                 beforeDepartStation: false,
                 isDepartStation: true,
                 afterArriveStation: false,
-                isArriveStation: false
+                isArriveStation: false,
               });
             } else {
               // 当前车站非,即在出发车站前
@@ -107,7 +107,7 @@ const Schedule = memo(function Schedule(props) {
                 beforeDepartStation: true,
                 isDepartStation: false,
                 afterArriveStation: false,
-                isArriveStation: false
+                isArriveStation: false,
               });
             }
           } else if (!arriveRow) {
@@ -118,7 +118,7 @@ const Schedule = memo(function Schedule(props) {
                 beforeDepartStation: false,
                 isDepartStation: false,
                 afterArriveStation: false,
-                isArriveStation: true
+                isArriveStation: true,
               });
             } else {
               // 当前车站为途径的车站、
@@ -126,7 +126,7 @@ const Schedule = memo(function Schedule(props) {
                 beforeDepartStation: false,
                 isDepartStation: false,
                 afterArriveStation: false,
-                isArriveStation: false
+                isArriveStation: false,
               });
             }
           } else {
@@ -135,12 +135,12 @@ const Schedule = memo(function Schedule(props) {
               beforeDepartStation: false,
               isDepartStation: false,
               afterArriveStation: true,
-              isArriveStation: false
+              isArriveStation: false,
             });
           }
           Object.assign(data[i], {
             isStartStation: i === 0,
-            isEndStation: i === data.length - 1
+            isEndStation: i === data.length - 1,
           });
         }
         setScheduleList(data);
@@ -175,5 +175,5 @@ Schedule.prototype = {
   date: PropTypes.number.isRequired,
   trainNumber: PropTypes.string.isRequired,
   departStation: PropTypes.string.isRequired,
-  arriveStation: PropTypes.string.isRequired
+  arriveStation: PropTypes.string.isRequired,
 };

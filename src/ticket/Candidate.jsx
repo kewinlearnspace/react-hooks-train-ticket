@@ -1,9 +1,9 @@
-import React, { memo, useState, useCallback, useMemo, useContext } from "react";
-import PropTypes from "prop-types";
-import URI from "urijs";
-import "./Candidate.css";
-import { TrainContext } from "./context";
-import dayjs from "dayjs";
+import React, { memo, useState, useCallback, useMemo, useContext } from 'react';
+import PropTypes from 'prop-types';
+import URI from 'urijs';
+import './Candidate.css';
+import { TrainContext } from './context';
+import dayjs from 'dayjs';
 
 const Channel = memo(function Channel(props) {
   const { name, desc, type } = props;
@@ -12,12 +12,12 @@ const Channel = memo(function Channel(props) {
     TrainContext
   );
   const src = useMemo(() => {
-    return new URI("order.html")
-      .setSearch("trainNumber", trainNumber)
-      .setSearch("dStation", departStation)
-      .setSearch("aStation", arriveStation)
-      .setSearch("type", type)
-      .setSearch("date", dayjs(departDate).format("YYYY-MM-DD"))
+    return new URI('order.html')
+      .setSearch('trainNumber', trainNumber)
+      .setSearch('dStation', departStation)
+      .setSearch('aStation', arriveStation)
+      .setSearch('type', type)
+      .setSearch('date', dayjs(departDate).format('YYYY-MM-DD'))
       .toString();
   }, [trainNumber, departStation, arriveStation, departDate, type]);
   return (
@@ -35,7 +35,7 @@ const Channel = memo(function Channel(props) {
 Channel.prototype = {
   name: PropTypes.string.isRequired,
   desc: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 };
 
 const Seat = memo(function Seat(props) {
@@ -46,7 +46,7 @@ const Seat = memo(function Seat(props) {
     channels,
     expended,
     onToggle,
-    idx
+    idx,
   } = props;
   return (
     <li>
@@ -56,12 +56,12 @@ const Seat = memo(function Seat(props) {
           <i>￥</i>
           {priceMsg}
         </span>
-        <span className="btn">{expended ? "收起" : "预订"}</span>
+        <span className="btn">{expended ? '收起' : '预订'}</span>
         <span className="num">{ticketsLeft}</span>
       </div>
       <div
         className="channels"
-        style={{ height: expended ? channels.length * 55 + "px" : 0 }}
+        style={{ height: expended ? channels.length * 55 + 'px' : 0 }}
       >
         {channels.map((channel, index) => (
           <Channel key={channel.name} {...channel} type={type}></Channel>
@@ -78,7 +78,7 @@ Seat.prototype = {
   channels: PropTypes.array.isRequired,
   expended: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
-  idx: PropTypes.number.isRequired
+  idx: PropTypes.number.isRequired,
 };
 
 const Candidate = memo(function Candidate(props) {
@@ -110,5 +110,5 @@ const Candidate = memo(function Candidate(props) {
 export default Candidate;
 
 Candidate.prototype = {
-  tickets: PropTypes.array.isRequired
+  tickets: PropTypes.array.isRequired,
 };

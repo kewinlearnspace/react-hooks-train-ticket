@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import classnames from "classnames";
-import "./DateSelector.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import './DateSelector.css';
 
-import Header from "./Header.jsx";
-import { h0 } from "./fp";
+import Header from './Header.jsx';
+import { h0 } from './fp';
 /**
  *
  * @param {*} props
@@ -21,13 +21,13 @@ function Day(props) {
   const now = h0();
 
   if (day < now) {
-    classes.push("disabled");
+    classes.push('disabled');
   }
   if ([6, 0].includes(new Date(day).getDay())) {
-    classes.push("weekend");
+    classes.push('weekend');
   }
 
-  const dateString = now === day ? "今天" : new Date(day).getDate();
+  const dateString = now === day ? '今天' : new Date(day).getDate();
   return (
     <td className={classnames(classes)} onClick={() => onSelect(day)}>
       {dateString}
@@ -36,7 +36,7 @@ function Day(props) {
 }
 Day.prototype = {
   day: PropTypes.number,
-  onSelect: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired,
 };
 
 // 周
@@ -52,7 +52,7 @@ function Week(props) {
 }
 Month.prototype = {
   days: PropTypes.array.isRequired,
-  onSelect: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired,
 };
 
 // 月
@@ -123,7 +123,7 @@ function Month(props) {
 
 Month.prototype = {
   startingTimeInMonth: PropTypes.number.isRequired,
-  onSelect: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default function DateSelector(props) {
@@ -147,7 +147,7 @@ export default function DateSelector(props) {
   monthSequence.push(now.getTime());
 
   return (
-    <div className={classnames("date-selector", { hidden: !show })}>
+    <div className={classnames('date-selector', { hidden: !show })}>
       <Header title="日期选择" onBack={onBack}></Header>
       <div className="date-selector-tables">
         {monthSequence.map(month => (
@@ -165,5 +165,5 @@ export default function DateSelector(props) {
 DateSelector.prototype = {
   show: PropTypes.bool.isRequired,
   onSelect: PropTypes.func.isRequired,
-  onBack: PropTypes.func.isRequired
+  onBack: PropTypes.func.isRequired,
 };

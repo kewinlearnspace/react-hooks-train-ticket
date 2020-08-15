@@ -1,18 +1,18 @@
-import React, { useCallback, useMemo } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import './App.css'
+import React, { useCallback, useMemo } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import './App.css';
 
-import Header from '../common/Header.jsx'
-import DepartDate from './DepartDate.jsx'
-import HighSpeed from './HighSpeed.jsx'
-import Journey from './Journey.jsx'
-import Submit from './Submit.jsx'
+import Header from '../common/Header.jsx';
+import DepartDate from './DepartDate.jsx';
+import HighSpeed from './HighSpeed.jsx';
+import Journey from './Journey.jsx';
+import Submit from './Submit.jsx';
 
-import CitySelector from '../common/CitySelector.jsx'
-import DateSelector from '../common/DateSelector.jsx'
+import CitySelector from '../common/CitySelector.jsx';
+import DateSelector from '../common/DateSelector.jsx';
 
-import { h0 } from '../common/fp'
+import { h0 } from '../common/fp';
 
 // actions返回的是对象。需要将其传入到dispatch中
 import {
@@ -25,7 +25,7 @@ import {
   hideDateSelector,
   setDepartDate,
   toggleHighSpeed,
-} from './actions'
+} from './actions';
 
 function App(props) {
   const {
@@ -38,11 +38,11 @@ function App(props) {
     isLoadingCityData,
     departDate,
     highSpeed,
-  } = props
+  } = props;
   // 由于onBack没有引用到任何可变的变量,所以第二个参数为空
   const onBack = useCallback(() => {
-    window.history.back()
-  }, [])
+    window.history.back();
+  }, []);
 
   // 依赖于dispatch exchangeFromTo => 但是这三个值都不会变,所以传空数组
   // const doExchangeFromTo = useCallback(() => {
@@ -61,8 +61,8 @@ function App(props) {
         showCitySelector,
       },
       dispatch
-    )
-  }, [])
+    );
+  }, []);
 
   // 城市
   const citySlectorCbs = useMemo(() => {
@@ -73,8 +73,8 @@ function App(props) {
         onSelect: setSelectedCity,
       },
       dispatch
-    )
-  }, [])
+    );
+  }, []);
 
   // 日期
   const departDateCbs = useMemo(() => {
@@ -83,8 +83,8 @@ function App(props) {
         onClick: showDateSelector,
       },
       dispatch
-    )
-  }, [])
+    );
+  }, []);
 
   const dateSelector = useMemo(() => {
     return bindActionCreators(
@@ -92,20 +92,20 @@ function App(props) {
         onBack: hideDateSelector,
       },
       dispatch
-    )
-  }, [])
+    );
+  }, []);
 
   //
-  const onSelectDate = useCallback((day) => {
+  const onSelectDate = useCallback(day => {
     if (!day) {
-      return
+      return;
     }
     if (day < h0()) {
-      return
+      return;
     }
-    dispatch(setDepartDate(day))
-    dispatch(hideDateSelector())
-  }, [])
+    dispatch(setDepartDate(day));
+    dispatch(hideDateSelector());
+  }, []);
 
   const highSpeedCbs = useMemo(() => {
     return bindActionCreators(
@@ -113,8 +113,8 @@ function App(props) {
         toggle: toggleHighSpeed,
       },
       dispatch
-    )
-  }, [])
+    );
+  }, []);
   return (
     <div>
       <div className="header-wapper">
@@ -144,16 +144,16 @@ function App(props) {
         onSelect={onSelectDate}
       ></DateSelector>
     </div>
-  )
+  );
 }
 
 // connect将数据返回到当前组件的props中
 export default connect(
   function mapStateToProps(state) {
     // 获取所有的数据
-    return state
+    return state;
   },
   function mapDispatchToProps(dispatch) {
-    return { dispatch }
+    return { dispatch };
   }
-)(App)
+)(App);

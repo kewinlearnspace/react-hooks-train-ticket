@@ -1,29 +1,29 @@
-import { useCallback } from 'react'
-import { h0 } from './fp'
+import { useCallback } from 'react';
+import { h0 } from './fp';
 
 export default function useNav(departDate, dispatch, prevDate, nextDate) {
   // console.log(h0(departDate), '--', h0())
-  const isPrevDisabled = h0(departDate) <= h0()
-  const isNextDisabled = h0(departDate) - h0() > 20 * 86400 * 1000
+  const isPrevDisabled = h0(departDate) <= h0();
+  const isNextDisabled = h0(departDate) - h0() > 20 * 86400 * 1000;
 
   const prev = useCallback(() => {
     if (isPrevDisabled) {
-      return
+      return;
     }
-    dispatch(prevDate())
-  }, [isPrevDisabled])
+    dispatch(prevDate());
+  }, [isPrevDisabled]);
 
   const next = useCallback(() => {
     if (isNextDisabled) {
-      return
+      return;
     }
-    dispatch(nextDate())
-  }, [isNextDisabled])
+    dispatch(nextDate());
+  }, [isNextDisabled]);
 
   return {
     isPrevDisabled,
     isNextDisabled,
     prev,
     next,
-  }
+  };
 }

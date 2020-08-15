@@ -1,10 +1,10 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 
-import reducers from "./reducers";
-import thunk from "redux-thunk";
+import reducers from './reducers';
+import thunk from 'redux-thunk';
 
-import { h0 } from "../common/fp";
-import { ORDER_DEPART } from "./constant.js";
+import { h0 } from '../common/fp';
+import { ORDER_DEPART } from './constant.js';
 
 export default createStore(
   combineReducers(reducers),
@@ -29,7 +29,7 @@ export default createStore(
     arriveTimeStart: 0, // 终点站开始时间
     arriveTimeEnd: 24, // 终点站结束时间
     isFiltersVisible: false, // 筛选浮层是否显示
-    searchParsed: false // 控制URL解析完成后才开始发送请求
+    searchParsed: false, // 控制URL解析完成后才开始发送请求
   },
   applyMiddleware(thunk)
 );

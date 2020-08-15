@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useMemo } from "react";
-import { connect } from "react-redux";
-import URI from "urijs";
-import dayjs from "dayjs";
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { connect } from 'react-redux';
+import URI from 'urijs';
+import dayjs from 'dayjs';
 
-import "./App.css";
+import './App.css';
 
-import useNav from "../common/useNav.js";
-import Nav from "../common/Nav.jsx";
-import Bottom from "./Bottom.jsx";
-import List from "./List.jsx";
-import Header from "../common/Header.jsx";
+import useNav from '../common/useNav.js';
+import Nav from '../common/Nav.jsx';
+import Bottom from './Bottom.jsx';
+import List from './List.jsx';
+import Header from '../common/Header.jsx';
 
 import {
   setFrom,
@@ -35,11 +35,11 @@ import {
   setArriveTimeStart,
   setDepartTimeEnd,
   setDepartTimeStart,
-  setArriveTimeEnd
-} from "./actions";
+  setArriveTimeEnd,
+} from './actions';
 
-import { h0 } from "../common/fp";
-import { bindActionCreators } from "redux";
+import { h0 } from '../common/fp';
+import { bindActionCreators } from 'redux';
 
 function App(props) {
   const {
@@ -64,7 +64,7 @@ function App(props) {
     arriveTimeEnd,
     searchParsed, // 控制URL解析完成后才开始发送请求
     trainList,
-    isFiltersVisible
+    isFiltersVisible,
   } = props;
   const onBack = useCallback(() => {
     window.history.back();
@@ -80,7 +80,7 @@ function App(props) {
     dispatch(setFrom(from));
     dispatch(setTo(to));
     dispatch(setDepartDate(h0(dayjs(date).valueOf())));
-    dispatch(setHighSpeed(highSpeed === "true"));
+    dispatch(setHighSpeed(highSpeed === 'true'));
     // url参数解析完后
     dispatch(setSearchParsed(true));
   }, []);
@@ -90,27 +90,27 @@ function App(props) {
     if (!searchParsed) {
       return;
     }
-    const url = new URI("/rest/query")
-      .setSearch("from", from)
-      .setSearch("to", to)
-      .setSearch("date", dayjs(departDate).format("YYYY-MM-DD"))
-      .setSearch("highSpeed", highSpeed)
-      .setSearch("orderType", orderType)
-      .setSearch("onlyTickets", onlyTickets)
-      .setSearch("checkedTicketTypes", Object.keys(checkedTicketTypes).join())
-      .setSearch("checkedTrainTypes", Object.keys(checkedTrainTypes).join())
+    const url = new URI('/rest/query')
+      .setSearch('from', from)
+      .setSearch('to', to)
+      .setSearch('date', dayjs(departDate).format('YYYY-MM-DD'))
+      .setSearch('highSpeed', highSpeed)
+      .setSearch('orderType', orderType)
+      .setSearch('onlyTickets', onlyTickets)
+      .setSearch('checkedTicketTypes', Object.keys(checkedTicketTypes).join())
+      .setSearch('checkedTrainTypes', Object.keys(checkedTrainTypes).join())
       .setSearch(
-        "checkedDepartStations",
+        'checkedDepartStations',
         Object.keys(checkedDepartStations).join()
       )
       .setSearch(
-        "checkedArriveStations",
+        'checkedArriveStations',
         Object.keys(checkedArriveStations).join()
       )
-      .setSearch("departTimeStart", departTimeStart)
-      .setSearch("departTimeEnd", departTimeEnd)
-      .setSearch("arriveTimeStart", arriveTimeStart)
-      .setSearch("arriveTimeEnd", arriveTimeEnd)
+      .setSearch('departTimeStart', departTimeStart)
+      .setSearch('departTimeEnd', departTimeEnd)
+      .setSearch('arriveTimeStart', arriveTimeStart)
+      .setSearch('arriveTimeEnd', arriveTimeEnd)
       .toString();
     fetch(url)
       .then(res => res.json())
@@ -119,9 +119,9 @@ function App(props) {
           dataMap: {
             directTrainInfo: {
               trains,
-              filter: { ticketType, trainType, depStation, arrStation }
-            }
-          }
+              filter: { ticketType, trainType, depStation, arrStation },
+            },
+          },
         } = res;
         dispatch(setTrainList(trains));
         dispatch(setTicketTypes(ticketType));
@@ -144,7 +144,7 @@ function App(props) {
     departTimeStart,
     departTimeEnd,
     arriveTimeStart,
-    arriveTimeEnd
+    arriveTimeEnd,
   ]);
 
   const { isPrevDisabled, isNextDisabled, prev, next } = useNav(
@@ -168,7 +168,7 @@ function App(props) {
         setArriveTimeStart,
         setDepartTimeEnd,
         setDepartTimeStart,
-        setArriveTimeEnd
+        setArriveTimeEnd,
       },
       dispatch
     );

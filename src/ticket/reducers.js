@@ -9,8 +9,8 @@ import {
   ACTION_SET_DURATION_STR,
   ACTION_SET_TICKETS,
   ACTION_SET_IS_SCHEDULE_VISIBLE,
-  ACTION_SET_SEARCH_PARSED
-} from "./actions";
+  ACTION_SET_SEARCH_PARSED,
+} from './actions';
 export default {
   departDate(state = Date.now(), action) {
     const { type, payload } = action;
@@ -110,5 +110,5 @@ export default {
       default:
     }
     return state;
-  }
+  },
 };

@@ -1,5 +1,5 @@
-import React, { memo } from 'react'
-import './Submit.css'
+import React, { memo } from 'react';
+import './Submit.css';
 
 export default memo(function Submit() {
   return (
@@ -8,5 +8,5 @@ export default memo(function Submit() {
         搜索
       </button>
     </div>
-  )
-})
+  );
+});
