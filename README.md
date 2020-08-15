@@ -61,7 +61,8 @@ npm start
 - 如何通过监控传入属性的 props 的变化,来更新 state 的状态
   - 通过 useRef 缓存上一次的值。当传入的 props 值发生变化时,取出上一次的值与当前 props 的值进行比较,对比是否需要更新 state 的状态
 - 异步组件加载失败,如何解决
-- 使用内部函数来创建JSX,在性能上是有缺陷的？为什么？
+- 使用内部函数来创建 JSX,在性能上是有缺陷的？为什么？
+- renderProps 如何使用?它的使用场景
 - mapDispatchToProps 和 bindActionCreators 的使用区别
 
 ## 报错搜集

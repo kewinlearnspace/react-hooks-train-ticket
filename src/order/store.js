@@ -15,7 +15,7 @@ export default createStore(
     departTimeStr: null, // 出发时间
     arriveTimeStr: null, // 到达时间
     durationStr: null, // 行程时间
-    price: null, // 票价
+    price: 0, // 票价
     passengers: [], // 乘客信息
     menu: null, // 弹出菜单
     isMenuVisible: false, // 菜单是否可见
