@@ -94,9 +94,15 @@ function App(props) {
       dispatch
     )
   }, [])
+  
   const menuCbs = useMemo(() => {
     return bindActionCreators({ hideMenu }, dispatch)
   }, [])
+
+  const chooseCbs = useMemo(() => {
+    return bindActionCreators({ updatePassenger }, dispatch)
+  }, [])
+
   if (!searchParsed) {
     return null
   }
@@ -121,6 +127,7 @@ function App(props) {
       </div>
       <Ticket price={price} type={seatType}></Ticket>
       <Passengers passengers={passengers} {...passengersCbs}></Passengers>
+      {passengers.length > 0 && <Choose passengers={passengers} {...chooseCbs}></Choose>}
       <Menu show={isMenuVisible} {...menu} {...menuCbs}></Menu>
     </div>
   )
