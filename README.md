@@ -132,3 +132,47 @@ npm start
     ```
     - **prettier** 配置参考
       > https://prettier.io/docs/en/options.html#prose-wrap
+
+## 线上环境打包问题
+
+- 代码体积
+
+  - 使用`npm i webpack-bundle-analyzer -D`分析器。并在`webpack.config.js`引入插件,在 `plugins` 中实例化
+
+  ```javascript
+  ...
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+    .BundleAnalyzerPlugin;
+  ...
+  plugins:[
+    ...
+    // process.env.GENERATE_BUNDLE_ANALYZER 环境变量匹配才允许生成查看插件大小的文件和端口
+     process.env.GENERATE_BUNDLE_ANALYZER === 'true' && new BundleAnalyzerPlugin({
+       openAnalyzer: false, // 是否打开 8888查看所下载插件大小
+       analyzerMode: 'static', // 只生成静态的html文件
+       }),
+    ...
+  ]
+
+  ```
+
+- 线上环境,静态资源路径(可将静态资源托管到其他的服务器上)
+  - 可通过命令配置静态资源输出的地址 `PUBLIC URL =https://www.cdn.com npm run build`
+  - 通过配置`webpack.config.js`中的`publicPath`
+  ```javascrit
+  publicPath:'production' !== process.env.NODE_ENV ||
+              'true' === process.env.USE_LOCAL_FILES
+                  ? '/'
+                  : 'https://www.cdn.com/',
+  ```
+- `serviceWorker`的使用
+  - 入口JS文件中
+  ```javascript
+    import * as serviceWorker from '../serviceWorker';
+    if ('production' === process.env.NODE_ENV) {
+      // 生产环境
+      serviceWorker.register();
+    } else {
+      serviceWorker.unregister();
+    }
+  ```
