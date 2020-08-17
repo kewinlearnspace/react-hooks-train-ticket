@@ -45,6 +45,7 @@ Filter.propTypes = {
 
 const Option = memo(function Option(props) {
   const { title, options, checkedMap, dispatch } = props;
+  // console.log(options, checkedMap);
   // const toggle = useCallback(
   //   (value) => {
   //     const newCheckedMap = { ...checkedMap }
@@ -181,6 +182,12 @@ const BottomModal = memo(function BottomModal(props) {
   // 缓存到达结束时间
   const [localArriveTimeEnd, setLocalArriveTimeEnd] = useState(arriveTimeEnd);
 
+  /**
+   * @title 标题名称
+   * @options 对应标题的按钮列表
+   * @checkedMap 对应存储被选择的值
+   * @dispatch 对应修改存储值的方法
+   */
   const optionGroup = [
     {
       title: '坐席类型',

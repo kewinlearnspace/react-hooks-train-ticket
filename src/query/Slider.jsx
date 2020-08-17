@@ -31,6 +31,7 @@ const Slider = memo(function Slider(props) {
   // 记录上一次的值
   const prevCurrentStartHours = useRef(currentStartHours);
   const prevCurrentEndHours = useRef(currentEndHours);
+  // store存储的数值转换成百分比值
   const [start, setStart] = useState(() => (currentStartHours / 24) * 100);
   const [end, setEnd] = useState(() => (currentEndHours / 24) * 100);
 
@@ -63,6 +64,7 @@ const Slider = memo(function Slider(props) {
     return end;
   }, [end]);
 
+  // 百分比值转化成整数值
   const startHours = useMemo(() => {
     return Math.round((startPercent * 24) / 100);
   }, [startPercent]);

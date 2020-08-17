@@ -121,6 +121,7 @@ export function createAdult() {
     const { passengers } = getState();
     for (let passenger of passengers) {
       const keys = Object.keys(passenger);
+      // 判断passengers中的每个对象的属性值是否为空.为空不允许继续添加成员
       for (let key of keys) {
         if (!passenger[key]) {
           return;
@@ -192,7 +193,7 @@ export function removePassenger(id) {
 }
 
 /**
- * @description 增加乘客信息
+ * @description 更新乘客信息
  * @param {*} id 更新数据的id
  * @param {*} data 更新数据的集合
  * @param {*} keysToBeRemoved 需要删除字段的集合
@@ -236,6 +237,7 @@ export function showGenderMenu(id) {
     }
     dispatch(
       showMenu({
+        // 选择后出发的方法
         onPress(gender) {
           dispatch(updatePassenger(id, { gender }));
           dispatch(hideMenu());

@@ -19,7 +19,7 @@ export default createStore(
     ticketTypes: [], // 坐席类型- 所有备选项
     checkedTicketTypes: {}, // 坐席类型 - 被选中坐席
     trainTypes: [], // 车次类型 - 所有车次
-    checkedTrainTypes: {}, // 车次类型 - 选中的测试
+    checkedTrainTypes: {}, // 车次类型 - 被选中的车次类型
     departStations: [], // 出发车站
     checkedDepartStations: {}, // 被选中的出发车站
     arriveStations: [], // 到达车站-所有类型

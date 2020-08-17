@@ -31,11 +31,12 @@ npm start
 
 ## useReducer
 
-- useReducer 和 useSatet 一样都是用来声明 state 的方法的。声明的方式不同
-  - 第一个参数为 reducer 函数
+- useReducer 和 useState 一样都是用来声明 state 的方法的。声明的方式不同
+  - 第一个参数为 reducer 函数(reducer 接受两个参数一个是 state 另一个是 action 。然后返回一个状态 count 和 dispath，count 是返回状态中的值，而 dispatch 是一个可以发布事件来更新 state 的)
   - 第二个参数是 state 的初始值
   - 第三个参数是一个函数,其函数的参数为第二个参数(传入第三个参数可以得到异步初始化的 state)
   - 解构的返回值第一个参数是 state。第二个参数为 dispatch 函数
+  - useReducer 的第二、三的参数和 useState 的第一、二参数是一样的
 - 使用场景:复杂的 state 逻辑中可以用 useReducer 优化
 
 ## memo 用法
@@ -166,13 +167,13 @@ npm start
                   : 'https://www.cdn.com/',
   ```
 - `serviceWorker`的使用
-  - 入口JS文件中
+  - 入口 JS 文件中
   ```javascript
-    import * as serviceWorker from '../serviceWorker';
-    if ('production' === process.env.NODE_ENV) {
-      // 生产环境
-      serviceWorker.register();
-    } else {
-      serviceWorker.unregister();
-    }
+  import * as serviceWorker from '../serviceWorker';
+  if ('production' === process.env.NODE_ENV) {
+    // 生产环境
+    serviceWorker.register();
+  } else {
+    serviceWorker.unregister();
+  }
   ```

@@ -20,7 +20,6 @@ const Detail = memo(function Detail(props) {
     arriveStation,
     durationStr,
   } = props;
-
   const departDateStr = useMemo(() => format(departDate), [departDate]);
   const arriveDateStr = useMemo(() => format(arriveDate), [arriveDate]);
 
